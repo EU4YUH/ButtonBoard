@@ -7,13 +7,30 @@
     body { font-family: Arial, sans-serif; padding: 20px; }
     #buttons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px; }
     button { padding: 15px; font-size: 14px; cursor: pointer; }
-    #recording-controls { margin-bottom: 20px; }
+
+    /* Customizer panel */
+    #customizer {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    #customizer input[type="text"] {
+        width: 150px;
+    }
 </style>
 </head>
 <body>
 
 <h1>Audio Button Board (Saves Automatically)</h1>
 
+<!-- ========================= -->
+<!--     Recording Tab         -->
+<!-- ========================= -->
 <h2>Recording Tab</h2>
 <div id="recording-controls">
     <button id="startRecord">Start Recording</button>
@@ -27,6 +44,29 @@
     <button id="assignBtn" disabled>Assign Recording</button>
 </div>
 
+<!-- ========================= -->
+<!--     Button Customizer     -->
+<!-- ========================= -->
+<h2>Customize Buttons</h2>
+<div id="customizer">
+    <label>
+        Select Button:
+        <select id="customSelect"></select>
+    </label>
+
+    <label>
+        Button Name:
+        <input type="text" id="customName">
+    </label>
+
+    <label>
+        Button Color:
+        <input type="color" id="customColor">
+    </label>
+
+    <button id="saveCustom">Save Changes</button>
+</div>
+
 <h2>Buttons</h2>
 <div id="buttons"></div>
 
@@ -37,14 +77,21 @@
 --------------------------*/
 const buttonContainer = document.getElementById("buttons");
 const assignSelect = document.getElementById("assignSelect");
+const customSelect = document.getElementById("customSelect");
 
 let audioClips = new Array(100).fill(null);
+let buttons = [];
+let buttonData = JSON.parse(localStorage.getItem("buttonData") || "{}");
 
 for (let i = 1; i <= 100; i++) {
     const index = i - 1;
 
     const btn = document.createElement("button");
-    btn.textContent = "Button " + i;
+
+    // Apply saved customizations
+    btn.textContent = buttonData[index]?.name || ("Button " + i);
+    btn.style.backgroundColor = buttonData[index]?.color || "";
+
     btn.dataset.index = index;
 
     btn.addEventListener("click", () => {
@@ -53,12 +100,19 @@ for (let i = 1; i <= 100; i++) {
     });
 
     buttonContainer.appendChild(btn);
+    buttons[index] = btn;
 
-    // Dropdown
+    // Recording dropdown
     const opt = document.createElement("option");
     opt.value = index;
     opt.textContent = "Button " + i;
     assignSelect.appendChild(opt);
+
+    // Customizer dropdown
+    const opt2 = document.createElement("option");
+    opt2.value = index;
+    opt2.textContent = "Button " + i;
+    customSelect.appendChild(opt2);
 }
 
 /* -------------------------
@@ -114,21 +168,52 @@ stopBtn.onclick = () => {
 };
 
 /* -------------------------
-   ASSIGN AUDIO + SAVE TO localStorage
+   ASSIGN AUDIO + SAVE
 --------------------------*/
 assignBtn.onclick = async () => {
     if (!recordedAudioBlob) return;
 
     const index = assignSelect.value;
 
-    // Playback object
     audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
 
-    // Base64 encode and save
     const base64 = await blobToBase64(recordedAudioBlob);
     localStorage.setItem("audio_" + index, base64);
 
     alert("Saved to Button " + (parseInt(index) + 1));
+};
+
+/* -------------------------
+   BUTTON CUSTOMIZER LOGIC
+--------------------------*/
+const customName = document.getElementById("customName");
+const customColor = document.getElementById("customColor");
+const saveCustom = document.getElementById("saveCustom");
+
+customSelect.onchange = () => {
+    const index = customSelect.value;
+
+    customName.value = buttonData[index]?.name || ("Button " + (parseInt(index) + 1));
+    customColor.value = buttonData[index]?.color || "#ffffff";
+};
+
+// Initialize fields for first button
+customSelect.dispatchEvent(new Event("change"));
+
+saveCustom.onclick = () => {
+    const index = customSelect.value;
+
+    const name = customName.value.trim();
+    const color = customColor.value;
+
+    buttonData[index] = { name, color };
+
+    buttons[index].textContent = name;
+    buttons[index].style.backgroundColor = color;
+
+    localStorage.setItem("buttonData", JSON.stringify(buttonData));
+
+    alert("Updated Button " + (parseInt(index) + 1));
 };
 
 /* -------------------------
