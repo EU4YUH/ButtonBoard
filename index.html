@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>100 Button Audio Board (Cookie Saved)</title>
+<title>100 Button Audio Board (Persistent Save)</title>
 <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     #buttons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px; }
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<h1>Audio Button Board (with Cookies)</h1>
+<h1>Audio Button Board (Saves Automatically)</h1>
 
 <h2>Recording Tab</h2>
 <div id="recording-controls">
@@ -31,22 +31,9 @@
 <div id="buttons"></div>
 
 <script>
-/* -------------------------
-   Cookie Helpers
---------------------------*/
-function setCookie(name, value, days = 365) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 86400000));
-    document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
-}
-
-function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? match[2] : null;
-}
 
 /* -------------------------
-   Setup: Create 100 buttons
+   SETUP: Create 100 Buttons
 --------------------------*/
 const buttonContainer = document.getElementById("buttons");
 const assignSelect = document.getElementById("assignSelect");
@@ -56,19 +43,18 @@ let audioClips = new Array(100).fill(null);
 for (let i = 1; i <= 100; i++) {
     const index = i - 1;
 
-    // Create playback buttons
     const btn = document.createElement("button");
     btn.textContent = "Button " + i;
     btn.dataset.index = index;
 
     btn.addEventListener("click", () => {
         if (audioClips[index]) audioClips[index].play();
-        else alert("No audio assigned to Button " + i);
+        else alert("No audio saved for Button " + i);
     });
 
     buttonContainer.appendChild(btn);
 
-    // Add to dropdown
+    // Dropdown
     const opt = document.createElement("option");
     opt.value = index;
     opt.textContent = "Button " + i;
@@ -76,18 +62,21 @@ for (let i = 1; i <= 100; i++) {
 }
 
 /* -------------------------
-   Load saved audio from cookies
+   LOAD AUDIO FROM LOCALSTORAGE
 --------------------------*/
-for (let i = 0; i < 100; i++) {
-    const base64 = getCookie("audio_" + i);
-    if (base64) {
-        const blob = base64ToBlob(base64, "audio/webm");
-        audioClips[i] = new Audio(URL.createObjectURL(blob));
+async function loadSavedAudio() {
+    for (let i = 0; i < 100; i++) {
+        const base64 = localStorage.getItem("audio_" + i);
+        if (base64) {
+            const blob = base64ToBlob(base64, "audio/webm");
+            audioClips[i] = new Audio(URL.createObjectURL(blob));
+        }
     }
 }
+loadSavedAudio();
 
 /* -------------------------
-   Recording Functionality
+   RECORDING
 --------------------------*/
 let mediaRecorder;
 let chunks = [];
@@ -109,7 +98,7 @@ startBtn.onclick = async () => {
     mediaRecorder.onstop = () => {
         recordedAudioBlob = new Blob(chunks, { type: "audio/webm" });
         assignBtn.disabled = false;
-        statusText.textContent = "Recording complete. Ready to assign.";
+        statusText.textContent = "Recording finished. Ready to assign.";
     };
 
     mediaRecorder.start();
@@ -125,43 +114,44 @@ stopBtn.onclick = () => {
 };
 
 /* -------------------------
-   Assign audio to button & SAVE to cookies
+   ASSIGN AUDIO + SAVE TO localStorage
 --------------------------*/
 assignBtn.onclick = async () => {
     if (!recordedAudioBlob) return;
 
     const index = assignSelect.value;
 
-    // Create audio object for playback
+    // Playback object
     audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
 
-    // Convert to Base64 and store in cookie
+    // Base64 encode and save
     const base64 = await blobToBase64(recordedAudioBlob);
-    setCookie("audio_" + index, base64);
+    localStorage.setItem("audio_" + index, base64);
 
-    alert("Audio assigned & saved to Button " + (parseInt(index) + 1));
+    alert("Saved to Button " + (parseInt(index) + 1));
 };
 
 /* -------------------------
-   Blob <-> Base64 Helpers
+   BLOB <-> BASE64 helpers
 --------------------------*/
 function blobToBase64(blob) {
     return new Promise(resolve => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onloadend = () =>
+            resolve(reader.result.split(",")[1]);
         reader.readAsDataURL(blob);
     });
 }
 
 function base64ToBlob(base64, mime) {
-    const byteChars = atob(base64);
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) {
-        byteNumbers[i] = byteChars.charCodeAt(i);
+    const bytes = atob(base64);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) {
+        arr[i] = bytes.charCodeAt(i);
     }
-    return new Blob([new Uint8Array(byteNumbers)], { type: mime });
+    return new Blob([arr], { type: mime });
 }
-</script>
 
+</script>
 </body>
 </html>
