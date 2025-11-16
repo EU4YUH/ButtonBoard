@@ -1,294 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Art Portfolio - [Your Name]</title>
-  <style>
-    /* Reset & Fonts */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background: #f4f4f4;
-      color: #333;
-      line-height: 1.6;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* Navbar */
-    nav {
-      background: #111;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    nav .logo {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-
-    nav ul {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
-
-    nav ul li a:hover {
-      color: #f39c12;
-    }
-
-    /* Hero Section */
-    header {
-      padding: 5rem 2rem;
-      text-align: center;
-      background: linear-gradient(135deg, #222, #444);
-      color: white;
-    }
-
-    header h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: auto;
-    }
-
-    /* About Section */
-    #about {
-      padding: 3rem 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    #about h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    #about p {
-      text-align: justify;
-    }
-
-    /* Filter Menu */
-    .filter-menu {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0 1rem;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: #ddd;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.3s;
-    }
-
-    .filter-btn.active,
-    .filter-btn:hover {
-      background: #f39c12;
-      color: white;
-    }
-
-    /* Gallery Grid */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 1rem 2rem;
-    }
-
-    .gallery img {
-      width: 100%;
-      display: block;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
-
-    /* Lightbox */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 80%;
-    }
-
-    .lightbox:target {
-      display: flex;
-    }
-
-    /* Contact */
-    #contact {
-      padding: 3rem 2rem;
-      background: #eee;
-      max-width: 800px;
-      margin: auto;
-    }
-
-    #contact h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    form input,
-    form textarea {
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      resize: vertical;
-    }
-
-    form button {
-      background: #111;
-      color: white;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    form button:hover {
-      background: #f39c12;
-    }
-
-    /* Footer */
-    footer {
-      background: #111;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>100 Button Audio Board</title>
+<style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #buttons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px; }
+    button { padding: 15px; font-size: 14px; cursor: pointer; }
+    #recording-controls { margin-bottom: 20px; }
+</style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav>
-    <div class="logo">[Your Name]</div>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<h1>Audio Button Board (100 Buttons)</h1>
 
-  <!-- Hero Section -->
-  <header>
-    <h1>Welcome to My Art Portfolio</h1>
-    <p>Explore my latest artworks, illustrations, and creative projects.</p>
-  </header>
+<h2>Recording Tab</h2>
+<div id="recording-controls">
+    <button id="startRecord">Start Recording</button>
+    <button id="stopRecord" disabled>Stop Recording</button>
+    <p id="recordStatus">Not recording.</p>
 
-  <!-- About -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>
-      I’m a visual artist with a passion for color, form, and storytelling. My work blends traditional techniques with modern aesthetics, focusing on emotional expression and human experience. This portfolio showcases a selection of my recent works across various mediums including digital art, painting, and mixed media.
-    </p>
-  </section>
+    <label>
+        Program to button:
+        <select id="assignSelect"></select>
+    </label>
+    <button id="assignBtn" disabled>Assign Recording</button>
+</div>
 
-  <!-- Filter Buttons -->
-  <div class="filter-menu">
-    <button class="filter-btn active" onclick="filterGallery('all')">All</button>
-    <button class="filter-btn" onclick="filterGallery('digital')">Digital</button>
-    <button class="filter-btn" onclick="filterGallery('painting')">Painting</button>
-    <button class="filter-btn" onclick="filterGallery('sketch')">Sketches</button>
-  </div>
+<h2>Buttons</h2>
+<div id="buttons"></div>
 
-  <!-- Gallery -->
-  <section id="gallery" class="gallery">
-    <img src="https://via.placeholder.com/600x400?text=Digital+Art+1" data-category="digital" onclick="openLightbox(this.src)" />
-    <img src="https://via.placeholder.com/600x400?text=Painting+1" data-category="painting" onclick="openLightbox(this.src)" />
-    <img src="https://via.placeholder.com/600x400?text=Sketch+1" data-category="sketch" onclick="openLightbox(this.src)" />
-    <img src="https://via.placeholder.com/600x400?text=Digital+Art+2" data-category="digital" onclick="openLightbox(this.src)" />
-    <img src="https://via.placeholder.com/600x400?text=Painting+2" data-category="painting" onclick="openLightbox(this.src)" />
-    <img src="https://via.placeholder.com/600x400?text=Sketch+2" data-category="sketch" onclick="openLightbox(this.src)" />
-  </section>
+<script>
+/* -------------------------
+   Setup: Create 100 buttons
+--------------------------*/
+const buttonContainer = document.getElementById("buttons");
+const assignSelect = document.getElementById("assignSelect");
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Artwork Preview">
-  </div>
+let audioClips = new Array(100).fill(null);
 
-  <!-- Contact -->
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <form onsubmit="event.preventDefault(); alert('Message sent!');">
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+for (let i = 1; i <= 100; i++) {
+    // Create playback buttons
+    const btn = document.createElement("button");
+    btn.textContent = "Button " + i;
+    btn.dataset.index = i - 1;
 
-  <!-- Footer -->
-  <footer>
-    &copy; 2025 [Your Name] | Portfolio Website
-  </footer>
+    btn.addEventListener("click", () => {
+        const audio = audioClips[i - 1];
+        if (audio) audio.play();
+        else alert("No audio assigned to Button " + i);
+    });
 
-  <script>
-    function filterGallery(category) {
-      const images = document.querySelectorAll('.gallery img');
-      const buttons = document.querySelectorAll('.filter-btn');
+    buttonContainer.appendChild(btn);
 
-      buttons.forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`.filter-btn[onclick*="${category}"]`).classList.add('active');
+    // Add buttons to assignment dropdown
+    const opt = document.createElement("option");
+    opt.value = i - 1;
+    opt.textContent = "Button " + i;
+    assignSelect.appendChild(opt);
+}
 
-      images.forEach(img => {
-        if (category === 'all' || img.dataset.category === category) {
-          img.style.display = 'block';
-        } else {
-          img.style.display = 'none';
-        }
-      });
-    }
+/* -------------------------
+   Recording Functionality
+--------------------------*/
+let mediaRecorder;
+let chunks = [];
+let recordedAudioBlob = null;
 
-    function openLightbox(src) {
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').style.display = 'flex';
-    }
+const startBtn = document.getElementById("startRecord");
+const stopBtn = document.getElementById("stopRecord");
+const assignBtn = document.getElementById("assignBtn");
+const statusText = document.getElementById("recordStatus");
 
-    function closeLightbox() {
-      document.getElementById('light
+startBtn.onclick = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+
+    chunks = [];
+    recordedAudioBlob = null;
+
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.onstop = () => {
+        recordedAudioBlob = new Blob(chunks, { type: "audio/webm" });
+        assignBtn.disabled = false;
+        statusText.textContent = "Recording complete. Ready to assign.";
+    };
+
+    mediaRecorder.start();
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    statusText.textContent = "Recording...";
+};
+
+stopBtn.onclick = () => {
+    mediaRecorder.stop();
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+};
+
+/* -------------------------
+   Assign audio to a button
+--------------------------*/
+assignBtn.onclick = () => {
+    if (!recordedAudioBlob) return;
+
+    const index = assignSelect.value;
+    audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
+
+    alert("Audio assigned to Button " + (parseInt(index) + 1));
+};
+</script>
+
+</body>
+</html>
