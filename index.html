@@ -2,37 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>100 Button Audio Board (Persistent Save)</title>
+<title>Audio Button Board – Modern UI</title>
 <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    #buttons { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; margin-top: 20px; }
-    button { padding: 15px; font-size: 14px; cursor: pointer; }
+    body {
+        font-family: "Inter", Arial, sans-serif;
+        padding: 30px;
+        background: #f5f6fa;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        margin-top: 30px;
+        font-weight: 500;
+        border-left: 5px solid #4a90e2;
+        padding-left: 10px;
+        color: #4a90e2;
+    }
+
+    /* Card-style sections */
+    .panel {
+        background: white;
+        padding: 20px;
+        margin-top: 15px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    /* Grid of buttons */
+    #buttons {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    #buttons button {
+        padding: 16px;
+        font-size: 14px;
+        border-radius: 10px;
+        border: none;
+        background: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: transform 0.1s, box-shadow 0.2s;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    #buttons button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+
+    /* Recording controls */
+    #recording-controls button {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        margin-right: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        background: #4a90e2;
+        color: white;
+        transition: background 0.2s;
+    }
+    #recording-controls button:disabled {
+        background: #9bbfe9;
+        cursor: default;
+    }
+    #recording-controls button:hover:not(:disabled) {
+        background: #3574c9;
+    }
+
+    select, input[type="text"], input[type="color"] {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #fff;
+        font-size: 14px;
+    }
 
     /* Customizer panel */
     #customizer {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        padding: 10px;
-        border: 1px solid #ccc;
         display: flex;
-        gap: 10px;
         flex-wrap: wrap;
+        gap: 15px;
         align-items: center;
+        padding-top: 10px;
     }
-    #customizer input[type="text"] {
-        width: 150px;
+
+    #saveCustom {
+        padding: 10px 16px;
+        background: #27ae60;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 14px;
     }
+
+    #saveCustom:hover {
+        background: #1f8c4c;
+    }
+
 </style>
 </head>
 <body>
 
-<h1>Audio Button Board (Saves Automatically)</h1>
+<h1>🎵 Audio Button Board</h1>
 
 <!-- ========================= -->
 <!--     Recording Tab         -->
 <!-- ========================= -->
-<h2>Recording Tab</h2>
-<div id="recording-controls">
+<h2>Recording</h2>
+<div id="recording-controls" class="panel">
     <button id="startRecord">Start Recording</button>
     <button id="stopRecord" disabled>Stop Recording</button>
     <p id="recordStatus">Not recording.</p>
@@ -48,27 +138,27 @@
 <!--     Button Customizer     -->
 <!-- ========================= -->
 <h2>Customize Buttons</h2>
-<div id="customizer">
+<div id="customizer" class="panel">
     <label>
         Select Button:
         <select id="customSelect"></select>
     </label>
 
     <label>
-        Button Name:
+        Name:
         <input type="text" id="customName">
     </label>
 
     <label>
-        Button Color:
+        Color:
         <input type="color" id="customColor">
     </label>
 
     <button id="saveCustom">Save Changes</button>
 </div>
 
-<h2>Buttons</h2>
-<div id="buttons"></div>
+<h2>Soundboard</h2>
+<div id="buttons" class="panel"></div>
 
 <script>
 
@@ -102,13 +192,12 @@ for (let i = 1; i <= 100; i++) {
     buttonContainer.appendChild(btn);
     buttons[index] = btn;
 
-    // Recording dropdown
+    // Populate dropdowns
     const opt = document.createElement("option");
     opt.value = index;
     opt.textContent = "Button " + i;
     assignSelect.appendChild(opt);
 
-    // Customizer dropdown
     const opt2 = document.createElement("option");
     opt2.value = index;
     opt2.textContent = "Button " + i;
@@ -116,7 +205,7 @@ for (let i = 1; i <= 100; i++) {
 }
 
 /* -------------------------
-   LOAD AUDIO FROM LOCALSTORAGE
+   LOAD AUDIO FROM STORAGE
 --------------------------*/
 async function loadSavedAudio() {
     for (let i = 0; i < 100; i++) {
@@ -184,7 +273,7 @@ assignBtn.onclick = async () => {
 };
 
 /* -------------------------
-   BUTTON CUSTOMIZER LOGIC
+   BUTTON CUSTOMIZER
 --------------------------*/
 const customName = document.getElementById("customName");
 const customColor = document.getElementById("customColor");
@@ -197,7 +286,6 @@ customSelect.onchange = () => {
     customColor.value = buttonData[index]?.color || "#ffffff";
 };
 
-// Initialize fields for first button
 customSelect.dispatchEvent(new Event("change"));
 
 saveCustom.onclick = () => {
