@@ -59,7 +59,6 @@
     --hover-shadow: rgba(0,0,0,0.7);
   }
 
-  /* Basic styles */
   body {
     font-family: 'Montserrat', Arial, sans-serif;
     padding: 30px;
@@ -70,7 +69,7 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  /* Logo/header styling */
+  /* Logo/Header Section with your provided image */
   #logo-container {
     display: flex;
     align-items: center;
@@ -255,9 +254,9 @@
 </head>
 <body>
 
-<!-- Logo/Header Section -->
+<!-- Logo/Header with your image -->
 <div id="logo-container">
-  <img id="logo" src="https://via.placeholder.com/60?text=🎵" alt="Logo" />
+  <img id="logo" src="https://i.pinimg.com/1200x/0b/8b/18/0b8b18e654a6261fffcd7d6e1561e6c4.jpg" alt="Logo" />
   <div id="logo-text">Audio Button Board</div>
 </div>
 
@@ -398,12 +397,17 @@ const themes = {
 };
 
 function applyTheme(themeName) {
+    // Remove existing theme classes
     document.body.className = '';
     document.body.classList.remove('theme-vibrant', 'theme-pastel', 'theme-metallic');
+    // Add new theme class
     document.body.classList.add(`theme-${themeName}`);
     const theme = themes[themeName];
     for (let varName in theme) {
-        document.documentElement.style.setProperty(varName, theme[varName]);
+        // Only set CSS variables for UI, not button colors
+        if (!varName.includes('button')) {
+            document.documentElement.style.setProperty(varName, theme[varName]);
+        }
     }
 }
 
@@ -445,7 +449,10 @@ for (let i = 1; i <= 100; i++) {
     const index = i - 1;
     const btn = document.createElement("button");
     btn.textContent = buttonData[index]?.name || ("Button " + i);
-    btn.style.backgroundColor = buttonData[index]?.color || "";
+    // Set button color from saved data
+    if (buttonData[index]?.color) {
+        btn.style.backgroundColor = buttonData[index].color;
+    }
     btn.dataset.index = index;
 
     btn.addEventListener("click", () => {
@@ -548,9 +555,8 @@ saveCustom.onclick = () => {
     const color = customColor.value;
     buttonData[index] = { name, color };
     buttons[index].textContent = name;
-    buttons[index].style.backgroundColor = color;
+    buttons[index].style.backgroundColor = color; // update button color
     localStorage.setItem("buttonData", JSON.stringify(buttonData));
-    alert("Updated Button " + (parseInt(index) + 1));
 };
 
 /* Helper functions for Blob <-> Base64 conversions */
