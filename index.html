@@ -535,13 +535,32 @@ assignBtn.onclick = async () => {
     if (!recordedAudioBlob) return;
     const index = assignSelect.value;
     const url = URL.createObjectURL(recordedAudioBlob);
-    // Store URL string
+    // Store the URL string in the array
     audioClips[index] = url;
     // Save in localStorage
     const base64 = await blobToBase64(recordedAudioBlob);
     localStorage.setItem("audio_" + index, base64);
     alert("Saved to Button " + (parseInt(index) + 1));
 };
+
+/* Set up play event for all buttons (re-initialized after creation) */
+function setupButtonPlay(index) {
+    buttons[index].addEventListener("click", () => {
+        if (audioClips[index]) {
+            if (!isMuted) {
+                const audio = new Audio(audioClips[index]);
+                audio.play();
+            }
+        } else {
+            alert("No audio assigned to this button.");
+        }
+    });
+}
+
+// Initialize event listeners for all buttons
+for (let i = 0; i < 100; i++) {
+    setupButtonPlay(i);
+}
 
 /* Button customizer */
 const customName = document.getElementById("customName");
