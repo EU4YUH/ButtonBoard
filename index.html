@@ -10,7 +10,6 @@
     margin: 20px;
     padding: 20px;
   }
-
   #logo-container {
     display: flex;
     align-items: center;
@@ -24,14 +23,12 @@
     font-size: 24px;
     font-weight: 600;
   }
-
   #buttons {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 8px;
     margin-top: 20px;
   }
-
   button {
     padding: 12px;
     border-radius: 8px;
@@ -44,9 +41,7 @@
   button:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   }
-
-  /* Additional controls styling */
-  #record-controls, #custom-controls {
+  #record-section {
     margin-top: 20px;
   }
 </style>
@@ -59,12 +54,12 @@
 </div>
 
 <h3>Recording Controls</h3>
-<div id="record-controls" class="panel">
-  <button id="startBtn">Start Recording</button>
-  <button id="stopBtn" disabled>Stop Recording</button>
-  <button id="saveBtn" disabled>Assign to Button</button>
+<div id="record-section" class="panel">
+  <button id="startRecord">Start Recording</button>
+  <button id="stopRecord" disabled>Stop Recording</button>
+  <button id="saveRecording" disabled>Save to Selected Button</button>
   <br/><br/>
-  <label>Choose Button:
+  <label>Select Button:
     <select id="buttonSelect"></select>
   </label>
 </div>
@@ -73,24 +68,21 @@
 <div id="buttons"></div>
 
 <script>
-const totalButtons = 100;
-const buttonsContainer = document.getElementById("buttons");
-const buttonSelect = document.getElementById("buttonSelect");
-const saveButton = document.getElementById("saveBtn");
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
+// Constants
+const NUM_BUTTONS = 100;
+const buttonsContainer = document.getElementById('buttons');
+const buttonSelect = document.getElementById('buttonSelect');
+const saveBtn = document.getElementById('saveRecording');
+const startBtn = document.getElementById('startRecord');
+const stopBtn = document.getElementById('stopRecord');
 
-let mediaRecorder;
-let chunks = [];
-let recordedBlob = null;
+// Data structures
+const buttonUrls = new Array(NUM_BUTTONS).fill(null); // Store object URLs for each button
+const buttons = []; // Store button DOM elements
 
-// Array to hold URLs for each button
-const buttonUrls = new Array(totalButtons).fill(null);
-
-// Create 100 buttons dynamically
-const buttons = [];
-for (let i=0; i<totalButtons; i++) {
-  const btn = document.createElement("button");
+// Create buttons dynamically
+for (let i=0; i<NUM_BUTTONS; i++) {
+  const btn = document.createElement('button');
   btn.textContent = `Button ${i+1}`;
   btn.dataset.index = i;
   btn.onclick = () => {
@@ -98,14 +90,13 @@ for (let i=0; i<totalButtons; i++) {
       const audio = new Audio(buttonUrls[i]);
       audio.play();
     } else {
-      alert("No recording assigned");
+      alert('No recording assigned to this button.');
     }
   };
   buttons.push(btn);
   buttonsContainer.appendChild(btn);
-
   // Populate dropdown
-  const option = document.createElement("option");
+  const option = document.createElement('option');
   option.value = i;
   option.textContent = `Button ${i+1}`;
   buttonSelect.appendChild(option);
@@ -113,8 +104,8 @@ for (let i=0; i<totalButtons; i++) {
 
 // Load saved recordings from localStorage
 function loadRecordings() {
-  for (let i=0; i<totalButtons; i++) {
-    const base64 = localStorage.getItem("audio_" + i);
+  for (let i=0; i<NUM_BUTTONS; i++) {
+    const base64 = localStorage.getItem('audio_'+i);
     if (base64) {
       const blob = base64ToBlob(base64);
       const url = URL.createObjectURL(blob);
@@ -124,7 +115,11 @@ function loadRecordings() {
 }
 loadRecordings();
 
-// Start recording
+// Recording setup
+let mediaRecorder;
+let chunks = [];
+let recordedBlob = null;
+
 startBtn.onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({audio:true});
   mediaRecorder = new MediaRecorder(stream);
@@ -132,46 +127,40 @@ startBtn.onclick = async () => {
   mediaRecorder.ondataavailable = e => chunks.push(e.data);
   mediaRecorder.onstop = () => {
     recordedBlob = new Blob(chunks, {type:'audio/webm'});
-    document.getElementById("saveBtn").disabled = false;
+    document.getElementById('saveRecording').disabled = false;
   };
   mediaRecorder.start();
   startBtn.disabled = true;
   stopBtn.disabled = false;
 };
 
-// Stop recording
 stopBtn.onclick = () => {
   mediaRecorder.stop();
   startBtn.disabled = false;
   stopBtn.disabled = true;
 };
 
-// Assign recording to selected button
-document.getElementById("saveBtn").onclick = async () => {
+// Save recorded audio to selected button
+document.getElementById('saveRecording').onclick = async () => {
   const index = parseInt(buttonSelect.value);
-  if (recordedBlob) {
-    // Revoke old URL
-    if (buttonUrls[index]) URL.revokeObjectURL(buttonUrls[index]);
-    const url = URL.createObjectURL(recordedBlob);
-    buttonUrls[index] = url;
-    const base64 = await blobToBase64(recordedBlob);
-    localStorage.setItem("audio_"+index, base64);
-    alert(`Assigned to Button ${index+1}`);
-  }
+  if (!recordedBlob) return;
+  // Revoke previous URL if exists
+  if (buttonUrls[index]) URL.revokeObjectURL(buttonUrls[index]);
+  const url = URL.createObjectURL(recordedBlob);
+  buttonUrls[index] = url;
+  const base64 = await blobToBase64(recordedBlob);
+  localStorage.setItem('audio_'+index, base64);
+  alert(`Recording assigned to Button ${index+1}`);
 };
 
-// Add event listeners to all buttons for playback
-for (let i=0; i<totalButtons; i++) {
-  ((i)=>{
-    buttons[i].onclick = () => {
-      if (buttonUrls[i]) {
-        const a = new Audio(buttonUrls[i]);
-        a.play();
-      } else {
-        alert("No recording assigned");
-      }
-    };
-  })(i);
+// Load recordings with object URLs
+for (let i=0; i<NUM_BUTTONS; i++) {
+  const base64 = localStorage.getItem('audio_'+i);
+  if (base64) {
+    const blob = base64ToBlob(base64);
+    const url = URL.createObjectURL(blob);
+    buttonUrls[i] = url;
+  }
 }
 
 // Helper functions
@@ -183,6 +172,7 @@ function base64ToBlob(base64) {
   }
   return new Blob([array], {type:'audio/webm'});
 }
+
 function blobToBase64(blob) {
   return new Promise((resolve) => {
     const reader=new FileReader();
@@ -193,12 +183,22 @@ function blobToBase64(blob) {
   });
 }
 
-// Volume toggle
-let muted=false;
-document.getElementById('volume-btn').onclick=()=>{
-  muted=!muted;
-  document.getElementById('volume-btn').textContent= muted ? '🔇':'🔊';
+// Clean up object URLs on page unload
+window.onunload = () => {
+  for (let url of buttonUrls) {
+    if (url) URL.revokeObjectURL(url);
+  }
 };
+
+// Mute toggle
+let muted=false;
+const volumeBtn = document.createElement('button');
+volumeBtn.textContent='🔊';
+volumeBtn.onclick=()=>{
+  muted=!muted;
+  volumeBtn.textContent= muted ? '🔇':'🔊';
+};
+document.body.insertBefore(volumeBtn, document.body.firstChild);
 </script>
 
 </body>
