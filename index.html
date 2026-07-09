@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Audio Button Board – Modern UI</title>
 <style>
     body {
@@ -9,21 +9,53 @@
         padding: 30px;
         background: #f5f6fa;
         color: #333;
+        position: relative;
     }
 
+    /* Header styles */
     h1 {
         text-align: center;
         font-weight: 600;
         letter-spacing: 1px;
         margin-bottom: 30px;
+        font-size: 2em;
+        position: relative;
     }
 
+    /* Volume button styling */
+    #volume-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4a90e2;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        font-size: 18px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, transform 0.2s;
+        z-index: 10;
+    }
+
+    #volume-btn:hover {
+        background: #3574c9;
+        transform: scale(1.05);
+    }
+
+    /* Title styles */
     h2 {
         margin-top: 30px;
         font-weight: 500;
         border-left: 5px solid #4a90e2;
         padding-left: 10px;
         color: #4a90e2;
+        font-size: 1.5em;
     }
 
     /* Card-style sections */
@@ -33,6 +65,12 @@
         margin-top: 15px;
         border-radius: 12px;
         box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .panel:hover {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
     }
 
     /* Grid of buttons */
@@ -50,14 +88,18 @@
         border: none;
         background: #fff;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        transition: transform 0.1s, box-shadow 0.2s;
+        transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
         cursor: pointer;
         white-space: nowrap;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
     }
 
     #buttons button:hover {
         transform: translateY(-3px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        background-color: #f0f0f0;
     }
 
     /* Recording controls */
@@ -70,14 +112,18 @@
         cursor: pointer;
         background: #4a90e2;
         color: white;
-        transition: background 0.2s;
+        transition: background 0.2s, transform 0.2s;
     }
+
     #recording-controls button:disabled {
         background: #9bbfe9;
         cursor: default;
+        opacity: 0.6;
     }
+
     #recording-controls button:hover:not(:disabled) {
         background: #3574c9;
+        transform: scale(1.05);
     }
 
     select, input[type="text"], input[type="color"] {
@@ -86,6 +132,12 @@
         border: 1px solid #ccc;
         background: #fff;
         font-size: 14px;
+        transition: box-shadow 0.2s;
+    }
+
+    select:focus, input[type="text"]:focus, input[type="color"]:focus {
+        box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+        outline: none;
     }
 
     /* Customizer panel */
@@ -95,6 +147,7 @@
         gap: 15px;
         align-items: center;
         padding-top: 10px;
+        flex-wrap: wrap;
     }
 
     #saveCustom {
@@ -104,19 +157,22 @@
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: background 0.2s, transform 0.2s;
         font-size: 14px;
     }
 
     #saveCustom:hover {
         background: #1f8c4c;
+        transform: scale(1.05);
     }
-
 </style>
 </head>
 <body>
 
 <h1>🎵 Audio Button Board</h1>
+
+<!-- Volume toggle button -->
+<button id="volume-btn" title="Toggle Mute">🔊</button>
 
 <!-- ========================= -->
 <!--     Recording Tab         -->
@@ -146,12 +202,12 @@
 
     <label>
         Name:
-        <input type="text" id="customName">
+        <input type="text" id="customName" />
     </label>
 
     <label>
         Color:
-        <input type="color" id="customColor">
+        <input type="color" id="customColor" />
     </label>
 
     <button id="saveCustom">Save Changes</button>
@@ -161,32 +217,35 @@
 <div id="buttons" class="panel"></div>
 
 <script>
-
 /* -------------------------
    SETUP: Create 100 Buttons
 --------------------------*/
 const buttonContainer = document.getElementById("buttons");
 const assignSelect = document.getElementById("assignSelect");
 const customSelect = document.getElementById("customSelect");
+const volumeBtn = document.getElementById("volume-btn");
 
 let audioClips = new Array(100).fill(null);
 let buttons = [];
 let buttonData = JSON.parse(localStorage.getItem("buttonData") || "{}");
+let isMuted = false;
 
+/* Create buttons dynamically */
 for (let i = 1; i <= 100; i++) {
     const index = i - 1;
-
     const btn = document.createElement("button");
-
-    // Apply saved customizations
     btn.textContent = buttonData[index]?.name || ("Button " + i);
     btn.style.backgroundColor = buttonData[index]?.color || "";
-
     btn.dataset.index = index;
 
     btn.addEventListener("click", () => {
-        if (audioClips[index]) audioClips[index].play();
-        else alert("No audio saved for Button " + i);
+        if (audioClips[index]) {
+            if (!isMuted) {
+                audioClips[index].play();
+            }
+        } else {
+            alert("No audio saved for Button " + (index + 1));
+        }
     });
 
     buttonContainer.appendChild(btn);
@@ -204,9 +263,7 @@ for (let i = 1; i <= 100; i++) {
     customSelect.appendChild(opt2);
 }
 
-/* -------------------------
-   LOAD AUDIO FROM STORAGE
---------------------------*/
+/* Load saved audio from localStorage */
 async function loadSavedAudio() {
     for (let i = 0; i < 100; i++) {
         const base64 = localStorage.getItem("audio_" + i);
@@ -218,9 +275,7 @@ async function loadSavedAudio() {
 }
 loadSavedAudio();
 
-/* -------------------------
-   RECORDING
---------------------------*/
+/* Recording functionality */
 let mediaRecorder;
 let chunks = [];
 let recordedAudioBlob = null;
@@ -233,11 +288,10 @@ const statusText = document.getElementById("recordStatus");
 startBtn.onclick = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream);
-
     chunks = [];
     recordedAudioBlob = null;
 
-    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
     mediaRecorder.onstop = () => {
         recordedAudioBlob = new Blob(chunks, { type: "audio/webm" });
         assignBtn.disabled = false;
@@ -256,32 +310,23 @@ stopBtn.onclick = () => {
     stopBtn.disabled = true;
 };
 
-/* -------------------------
-   ASSIGN AUDIO + SAVE
---------------------------*/
+/* Assign recorded audio to button */
 assignBtn.onclick = async () => {
     if (!recordedAudioBlob) return;
-
     const index = assignSelect.value;
-
     audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
-
     const base64 = await blobToBase64(recordedAudioBlob);
     localStorage.setItem("audio_" + index, base64);
-
     alert("Saved to Button " + (parseInt(index) + 1));
 };
 
-/* -------------------------
-   BUTTON CUSTOMIZER
---------------------------*/
+/* Button customizer */
 const customName = document.getElementById("customName");
 const customColor = document.getElementById("customColor");
 const saveCustom = document.getElementById("saveCustom");
 
 customSelect.onchange = () => {
     const index = customSelect.value;
-
     customName.value = buttonData[index]?.name || ("Button " + (parseInt(index) + 1));
     customColor.value = buttonData[index]?.color || "#ffffff";
 };
@@ -290,28 +335,20 @@ customSelect.dispatchEvent(new Event("change"));
 
 saveCustom.onclick = () => {
     const index = customSelect.value;
-
     const name = customName.value.trim();
     const color = customColor.value;
-
     buttonData[index] = { name, color };
-
     buttons[index].textContent = name;
     buttons[index].style.backgroundColor = color;
-
     localStorage.setItem("buttonData", JSON.stringify(buttonData));
-
     alert("Updated Button " + (parseInt(index) + 1));
 };
 
-/* -------------------------
-   BLOB <-> BASE64 helpers
---------------------------*/
+/* Helper functions for Blob <-> Base64 conversions */
 function blobToBase64(blob) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onloadend = () =>
-            resolve(reader.result.split(",")[1]);
+        reader.onloadend = () => resolve(reader.result.split(",")[1]);
         reader.readAsDataURL(blob);
     });
 }
@@ -324,6 +361,14 @@ function base64ToBlob(base64, mime) {
     }
     return new Blob([arr], { type: mime });
 }
+
+/* -------------------------
+   Volume toggle button
+--------------------------*/
+volumeBtn.onclick = () => {
+    isMuted = !isMuted;
+    volumeBtn.textContent = isMuted ? "🔇" : "🔊";
+};
 
 </script>
 </body>
