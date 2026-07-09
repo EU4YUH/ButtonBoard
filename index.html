@@ -455,18 +455,21 @@ for (let i = 1; i <= 100; i++) {
     }
     btn.dataset.index = index;
 
+    buttons[index] = btn;
+
+    // Add event listener for play
     btn.addEventListener("click", () => {
         if (audioClips[index]) {
             if (!isMuted) {
-                audioClips[index].play();
+                const audio = new Audio(audioClips[index]);
+                audio.play();
             }
         } else {
-            alert("No audio saved for Button " + (index + 1));
+            alert("No audio assigned to this button.");
         }
     });
 
     buttonContainer.appendChild(btn);
-    buttons[index] = btn;
 
     // Populate dropdowns
     const opt = document.createElement("option");
@@ -486,7 +489,7 @@ async function loadSavedAudio() {
         const base64 = localStorage.getItem("audio_" + i);
         if (base64) {
             const blob = base64ToBlob(base64, "audio/webm");
-            audioClips[i] = new Audio(URL.createObjectURL(blob));
+            audioClips[i] = URL.createObjectURL(blob);
         }
     }
 }
@@ -531,7 +534,10 @@ stopBtn.onclick = () => {
 assignBtn.onclick = async () => {
     if (!recordedAudioBlob) return;
     const index = assignSelect.value;
-    audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
+    const url = URL.createObjectURL(recordedAudioBlob);
+    // Store URL string
+    audioClips[index] = url;
+    // Save in localStorage
     const base64 = await blobToBase64(recordedAudioBlob);
     localStorage.setItem("audio_" + index, base64);
     alert("Saved to Button " + (parseInt(index) + 1));
@@ -554,12 +560,14 @@ saveCustom.onclick = () => {
     const name = customName.value.trim();
     const color = customColor.value;
     buttonData[index] = { name, color };
-    buttons[index].textContent = name;
-    buttons[index].style.backgroundColor = color; // update button color
+    // Update button text and color
+    const btn = buttons[index];
+    btn.textContent = name;
+    btn.style.backgroundColor = color;
     localStorage.setItem("buttonData", JSON.stringify(buttonData));
 };
 
-/* Helper functions for Blob <-> Base64 conversions */
+/* Helpers for Blob <-> Base64 conversions */
 function blobToBase64(blob) {
     return new Promise((resolve) => {
         const reader = new FileReader();
