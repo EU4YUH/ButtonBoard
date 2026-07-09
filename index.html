@@ -68,6 +68,24 @@
     margin: 0;
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
+    position: relative;
+  }
+
+  /* Error message styling */
+  #errorMessage {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ff4d4f;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-weight: 600;
+    z-index: 9999;
+    max-width: 300px;
+    display: none;
+    font-family: 'Montserrat', sans-serif;
   }
 
   /* Logo/header styling */
@@ -255,6 +273,9 @@
 </head>
 <body>
 
+<!-- Error Message Container -->
+<div id="errorMessage"></div>
+
 <!-- Logo/Header Section -->
 <div id="logo-container">
   <img id="logo" src="https://via.placeholder.com/60?text=🎵" alt="Logo" />
@@ -428,17 +449,27 @@ document.getElementById('themeSelect').onchange = () => {
 };
 
 /* -------------------------
-   SETUP: Create 100 Buttons
+   CREATE 100 Buttons
 --------------------------*/
 const buttonContainer = document.getElementById("buttons");
 const assignSelect = document.getElementById("assignSelect");
 const customSelect = document.getElementById("customSelect");
 const volumeBtn = document.getElementById("volume-btn");
+const errorDiv = document.getElementById('errorMessage');
 
 let audioClips = new Array(100).fill(null);
 let buttons = [];
 let buttonData = JSON.parse(localStorage.getItem("buttonData") || "{}");
 let isMuted = false;
+
+/* Utility function for errors */
+function showError(message) {
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 5000); // hide after 5 seconds
+}
 
 /* Create buttons dynamically */
 for (let i = 1; i <= 100; i++) {
@@ -451,10 +482,15 @@ for (let i = 1; i <= 100; i++) {
     btn.addEventListener("click", () => {
         if (audioClips[index]) {
             if (!isMuted) {
-                audioClips[index].play();
+                try {
+                    audioClips[index].play();
+                } catch (err) {
+                    showError("Error playing audio for Button " + (index + 1));
+                    console.error(err);
+                }
             }
         } else {
-            alert("No audio saved for Button " + (index + 1));
+            showError("No audio saved for Button " + (index + 1));
         }
     });
 
@@ -478,8 +514,13 @@ async function loadSavedAudio() {
     for (let i = 0; i < 100; i++) {
         const base64 = localStorage.getItem("audio_" + i);
         if (base64) {
-            const blob = base64ToBlob(base64, "audio/webm");
-            audioClips[i] = new Audio(URL.createObjectURL(blob));
+            try {
+                const blob = base64ToBlob(base64, "audio/webm");
+                audioClips[i] = new Audio(URL.createObjectURL(blob));
+            } catch (err) {
+                showError("Error loading audio for Button " + (i + 1));
+                console.error(err);
+            }
         }
     }
 }
@@ -496,38 +537,59 @@ const assignBtn = document.getElementById("assignBtn");
 const statusText = document.getElementById("recordStatus");
 
 startBtn.onclick = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    chunks = [];
-    recordedAudioBlob = null;
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        chunks = [];
+        recordedAudioBlob = null;
 
-    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-    mediaRecorder.onstop = () => {
-        recordedAudioBlob = new Blob(chunks, { type: "audio/webm" });
-        assignBtn.disabled = false;
-        statusText.textContent = "Recording finished. Ready to assign.";
-    };
+        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+        mediaRecorder.onstop = () => {
+            recordedAudioBlob = new Blob(chunks, { type: "audio/webm" });
+            assignBtn.disabled = false;
+            statusText.textContent = "Recording finished. Ready to assign.";
+        };
 
-    mediaRecorder.start();
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-    statusText.textContent = "Recording...";
+        mediaRecorder.start();
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        statusText.textContent = "Recording...";
+    } catch (err) {
+        showError("Error accessing microphone");
+        console.error(err);
+    }
 };
 
 stopBtn.onclick = () => {
-    mediaRecorder.stop();
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        try {
+            mediaRecorder.stop();
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        } catch (err) {
+            showError("Error stopping recording");
+            console.error(err);
+        }
+    }
 };
 
 /* Assign recorded audio to button */
 assignBtn.onclick = async () => {
-    if (!recordedAudioBlob) return;
+    if (!recordedAudioBlob) {
+        showError("No recording to assign");
+        return;
+    }
     const index = assignSelect.value;
-    audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
-    const base64 = await blobToBase64(recordedAudioBlob);
-    localStorage.setItem("audio_" + index, base64);
-    alert("Saved to Button " + (parseInt(index) + 1));
+    try {
+        audioClips[index] = new Audio(URL.createObjectURL(recordedAudioBlob));
+        const base64 = await blobToBase64(recordedAudioBlob);
+        localStorage.setItem("audio_" + index, base64);
+        await loadSavedAudio(); // reload all audio clips
+        alert("Saved to Button " + (parseInt(index) + 1));
+    } catch (err) {
+        showError("Error saving recording");
+        console.error(err);
+    }
 };
 
 /* Button customizer */
