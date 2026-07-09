@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <title>Audio Button Board – Modern UI</title>
 <style>
-:root {
-    /* Default theme variables, overridden by JS */
+  :root {
+    /* Default theme variables, will be overridden by JS */
     --bg-color: #f5f6fa;
     --text-color: #333;
     --primary-color: #4a90e2;
@@ -16,19 +16,17 @@
     --panel-bg: #fff;
     --panel-shadow: rgba(0,0,0,0.08);
     --hover-shadow: rgba(0,0,0,0.18);
-}
-body {
+  }
+  body {
     font-family: "Inter", Arial, sans-serif;
     padding: 30px;
     background: var(--bg-color);
     color: var(--text-color);
     margin: 0;
     transition: background 0.3s, color 0.3s;
-    position: relative;
-}
-
-/* Theme selector styling */
-#themeSelect {
+  }
+  /* Theme selector */
+  #themeSelect {
     position: fixed;
     top: 20px;
     right: 80px;
@@ -41,20 +39,19 @@ body {
     z-index: 10;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-#themeSelect:hover {
+  }
+  #themeSelect:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transform: scale(1.02);
-}
-h1 {
+  }
+  h1 {
     text-align: center;
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 30px;
     font-size: 2em;
-    position: relative;
-}
-#volume-btn {
+  }
+  #volume-btn {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -71,39 +68,39 @@ h1 {
     align-items: center;
     justify-content: center;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-#volume-btn:hover {
+  }
+  #volume-btn:hover {
     background: var(--hover-bg-color);
     box-shadow: 0 6px 16px rgba(0,0,0,0.3);
     transform: scale(1.05);
-}
-h2 {
+  }
+  h2 {
     margin-top: 30px;
     font-weight: 500;
     border-left: 5px solid var(--primary-color);
     padding-left: 10px;
     color: var(--primary-color);
     font-size: 1.5em;
-}
-.panel {
+  }
+  .panel {
     background: var(--panel-bg);
     padding: 20px;
     margin-top: 15px;
     border-radius: 12px;
     box-shadow: 0 3px 10px var(--panel-shadow);
     transition: box-shadow 0.3s, transform 0.3s;
-}
-.panel:hover {
+  }
+  .panel:hover {
     box-shadow: 0 8px 20px var(--hover-shadow);
     transform: translateY(-2px);
-}
-#buttons {
+  }
+  #buttons {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 12px;
     margin-top: 20px;
-}
-#buttons button {
+  }
+  #buttons button {
     padding: 16px;
     font-size: 14px;
     border-radius: 10px;
@@ -117,17 +114,17 @@ h2 {
     align-items: center;
     justify-content: center;
     font-weight: 600;
-}
-#buttons button.unassigned {
+  }
+  #buttons button.unassigned {
     background: #e0e0e0;
     color: #555;
     font-style: italic;
     opacity: 0.7;
-}
-#buttons button.unassigned:hover {
+  }
+  #buttons button.unassigned:hover {
     background: #d0d0d0;
     opacity: 0.9;
-}
+  }
 </style>
 </head>
 <body>
@@ -135,293 +132,218 @@ h2 {
 <h1>🎵 Audio Button Board</h1>
 <!-- Theme selector -->
 <select id="themeSelect" title="Choose Theme">
-    <!-- 22 options -->
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-    <option value="colorful">Colorful</option>
-    <option value="blue">Blue Calm</option>
-    <option value="red">Red Passion</option>
-    <option value="green">Green Fresh</option>
-    <option value="purple">Purple Dream</option>
-    <option value="orange">Orange Sunset</option>
-    <option value="teal">Teal Serenity</option>
-    <option value="pink">Pink Soft</option>
-    <option value="monochrome">Mono Gray</option>
-    <option value="pastel">Pastel Hues</option>
-    <option value="neon">Neon Bright</option>
-    <option value="retro">Retro Vibe</option>
-    <option value="minimal">Minimalist</option>
-    <option value="luxury">Luxury Gold</option>
-    <option value="ocean">Ocean Blue</option>
-    <option value="sunset">Sunset Orange</option>
-    <option value="forest">Forest Green</option>
-    <option value="lavender">Lavender</option>
-    <option value="metal">Metallic</option>
-    <option value="warm">Warm Tones</option>
-    <option value="cool">Cool Blues</option>
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="colorful">Colorful</option>
+  <option value="blue">Blue Calm</option>
+  <option value="red">Red Passion</option>
+  <option value="green">Green Fresh</option>
+  <option value="purple">Purple Dream</option>
+  <option value="orange">Orange Sunset</option>
+  <option value="teal">Teal Serenity</option>
+  <option value="pink">Pink Soft</option>
+  <option value="monochrome">Mono Gray</option>
+  <option value="pastel">Pastel Hues</option>
+  <option value="neon">Neon Bright</option>
+  <option value="retro">Retro Vibe</option>
+  <option value="minimal">Minimalist</option>
+  <option value="luxury">Luxury Gold</option>
+  <option value="ocean">Ocean Blue</option>
+  <option value="sunset">Sunset Orange</option>
+  <option value="forest">Forest Green</option>
+  <option value="lavender">Lavender</option>
+  <option value="metal">Metallic</option>
+  <option value="warm">Warm Tones</option>
+  <option value="cool">Cool Blues</option>
 </select>
+
 <!-- Volume toggle -->
 <button id="volume-btn" title="Toggle Mute">🔊</button>
-
-<h2>Recording</h2>
-<div id="recording-controls" class="panel">
-    <button id="startRecord">Start Recording</button>
-    <button id="stopRecord" disabled>Stop Recording</button>
-    <p id="recordStatus">Not recording.</p>
-    <label>
-        Program to button:
-        <select id="assignSelect"></select>
-    </label>
-    <button id="assignBtn" disabled>Assign Recording</button>
-</div>
-
-<h2>Customize Buttons</h2>
-<div id="customizer" class="panel">
-    <label>
-        Select Button:
-        <select id="customSelect"></select>
-    </label>
-    <label>
-        Name:
-        <input type="text" id="customName" />
-    </label>
-    <label>
-        Color:
-        <input type="color" id="customColor" />
-    </label>
-    <button id="saveCustom">Save Changes</button>
-</div>
 
 <h2>Soundboard</h2>
 <div id="buttons" class="panel"></div>
 
 <script>
-/* -------------------------
-   Theme management with 22 options
---------------------------*/
+/* --------- Theme management with persistence --------- */
 const themeSelect = document.getElementById('themeSelect');
 
 const themes = {
-    light: {
-        '--bg-color': '#f5f6fa',
-        '--text-color': '#333',
-        '--primary-color': '#4a90e2',
-        '--secondary-color': '#27ae60',
-        '--hover-bg-color': '#f0f0f0',
-        '--button-bg': '#fff',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#fff',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    dark: {
-        '--bg-color': '#222',
-        '--text-color': '#eee',
-        '--primary-color': '#66ccff',
-        '--secondary-color': '#55cc66',
-        '--hover-bg-color': '#444',
-        '--button-bg': '#333',
-        '--button-shadow': 'rgba(0,0,0,0.3)',
-        '--panel-bg': '#333',
-        '--panel-shadow': 'rgba(0,0,0,0.4)',
-        '--hover-shadow': 'rgba(0,0,0,0.6)',
-    },
-    colorful: {
-        '--bg-color': '#fff8e1',
-        '--text-color': '#444',
-        '--primary-color': '#e91e63',
-        '--secondary-color': '#ff9800',
-        '--hover-bg-color': '#ffe0b2',
-        '--button-bg': '#fff3e0',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#fffde7',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    blue: {
-        '--bg-color': '#e0f7fa',
-        '--text-color': '#01579b',
-        '--primary-color': '#0288d1',
-        '--secondary-color': '#00bcd4',
-        '--hover-bg-color': '#b2ebf2',
-        '--button-bg': '#b2ebf2',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#e0f2f1',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    red: {
-        '--bg-color': '#ffebee',
-        '--text-color': '#b71c1c',
-        '--primary-color': '#d32f2f',
-        '--secondary-color': '#f44336',
-        '--hover-bg-color': '#ffcdd2',
-        '--button-bg': '#f44336',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#ffcdd2',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    green: {
-        '--bg-color': '#e8f5e9',
-        '--text-color': '#1b5e20',
-        '--primary-color': '#388e3c',
-        '--secondary-color': '#4caf50',
-        '--hover-bg-color': '#c8e6c9',
-        '--button-bg': '#4caf50',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#c8e6c9',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    purple: {
-        '--bg-color': '#f3e5f5',
-        '--text-color': '#4a148c',
-        '--primary-color': '#7b1fa2',
-        '--secondary-color': '#9c27b0',
-        '--hover-bg-color': '#e1bee7',
-        '--button-bg': '#9c27b0',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#e1bee7',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    pastel: {
-        '--bg-color': '#faf3dd',
-        '--text-color': '#6b4f3b',
-        '--primary-color': '#f4a261',
-        '--secondary-color': '#2a9d8f',
-        '--hover-bg-color': '#f1faee',
-        '--button-bg': '#f4a261',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#faf3dd',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    neon: {
-        '--bg-color': '#0ff',
-        '--text-color': '#000',
-        '--primary-color': '#f0f',
-        '--secondary-color': '#0ff',
-        '--hover-bg-color': '#0f0',
-        '--button-bg': '#f0f',
-        '--button-shadow': 'rgba(0,0,0,0.1)',
-        '--panel-bg': '#00f',
-        '--panel-shadow': 'rgba(0,0,0,0.08)',
-        '--hover-shadow': 'rgba(0,0,0,0.18)',
-    }
-    // Add more themes to reach 22
+  light: {
+    '--bg-color': '#f5f6fa',
+    '--text-color': '#333',
+    '--primary-color': '#4a90e2',
+    '--secondary-color': '#27ae60',
+    '--hover-bg-color': '#f0f0f0',
+    '--button-bg': '#fff',
+    '--button-shadow': 'rgba(0,0,0,0.1)',
+    '--panel-bg': '#fff',
+    '--panel-shadow': 'rgba(0,0,0,0.08)',
+    '--hover-shadow': 'rgba(0,0,0,0.18)',
+  },
+  dark: {
+    '--bg-color': '#222',
+    '--text-color': '#eee',
+    '--primary-color': '#66ccff',
+    '--secondary-color': '#55cc66',
+    '--hover-bg-color': '#444',
+    '--button-bg': '#333',
+    '--button-shadow': 'rgba(0,0,0,0.3)',
+  },
+  colorful: {
+    '--bg-color': '#fff8e1',
+    '--text-color': '#444',
+    '--primary-color': '#e91e63',
+    '--secondary-color': '#ff9800',
+    '--hover-bg-color': '#ffe0b2',
+    '--button-bg': '#fff3e0',
+  },
+  blue: {
+    '--bg-color': '#e0f7fa',
+    '--text-color': '#01579b',
+    '--primary-color': '#0288d1',
+    '--secondary-color': '#00bcd4',
+  },
+  red: {
+    '--bg-color': '#ffebee',
+    '--text-color': '#b71c1c',
+    '--primary-color': '#d32f2f',
+    '--secondary-color': '#f44336',
+  },
+  green: {
+    '--bg-color': '#e8f5e9',
+    '--text-color': '#1b5e20',
+    '--primary-color': '#388e3c',
+    '--secondary-color': '#4caf50',
+  },
+  purple: {
+    '--bg-color': '#f3e5f5',
+    '--text-color': '#4a148c',
+    '--primary-color': '#7b1fa2',
+    '--secondary-color': '#9c27b0',
+  },
+  // Add more themes here to reach 22 total
+  pastel: {
+    '--bg-color': '#faf3dd',
+    '--text-color': '#6b4f3b',
+    '--primary-color': '#f4a261',
+    '--secondary-color': '#2a9d8f',
+  },
+  neon: {
+    '--bg-color': '#0ff',
+    '--text-color': '#000',
+    '--primary-color': '#f0f',
+    '--secondary-color': '#0ff',
+  }
 };
 
 function applyTheme(themeName) {
-    const theme = themes[themeName];
-    for (let varName in theme) {
-        document.documentElement.style.setProperty(varName, theme[varName]);
-    }
+  const theme = themes[themeName];
+  for (let prop in theme) {
+    document.documentElement.style.setProperty(prop, theme[prop]);
+  }
 }
 
-// Load saved theme
+// Load theme from localStorage
 const savedTheme = localStorage.getItem('theme') || 'light';
 applyTheme(savedTheme);
 document.getElementById('themeSelect').value = savedTheme;
+
+// Change theme handler
 document.getElementById('themeSelect').onchange = () => {
-    const selectedTheme = document.getElementById('themeSelect').value;
-    localStorage.setItem('theme', selectedTheme);
-    applyTheme(selectedTheme);
-};
+  const selected = document.getElementById('themeSelect').value;
+  localStorage.setItem('theme', selected);
+  applyTheme(selected);
+}
 
-/* -------------------------
-   Button creation and logic
---------------------------*/
-
-const buttonContainer = document.getElementById('buttons');
+/* --------- Create Buttons --------- */
+const container = document.getElementById('buttons');
 const assignSelect = document.getElementById('assignSelect');
 const customSelect = document.getElementById('customSelect');
 const volumeBtn = document.getElementById('volume-btn');
 
-let audioClips = new Array(100).fill(null);
+let audioClips = Array(100).fill(null);
 let buttons = [];
 let buttonData = JSON.parse(localStorage.getItem('buttonData') || '{}');
 let isMuted = false;
 
-/* Create 100 buttons dynamically */
+/* Generate 100 buttons */
 for (let i=1; i<=100; i++) {
-    const index = i-1;
-    const btn = document.createElement('button');
-    btn.textContent = buttonData[index]?.name || `Button ${i}`;
-    btn.dataset.index = index;
-    // Add class 'unassigned' if no audio
-    if (!localStorage.getItem(`audio_${index}`)) {
-        btn.className = 'unassigned';
+  const index = i-1;
+  const btn = document.createElement('button');
+  btn.textContent = buttonData[index]?.name || `Button ${i}`;
+  btn.dataset.index = index;
+  // Mark as unassigned if no audio
+  if (!localStorage.getItem(`audio_${index}`)) {
+    btn.className = 'unassigned';
+  }
+  // Style with saved color
+  if (buttonData[index]?.color) {
+    btn.style.backgroundColor = buttonData[index].color;
+  }
+  btn.onclick = () => {
+    if (audioClips[index] && !isMuted) {
+      audioClips[index].play();
+    } else {
+      alert('No audio assigned.');
     }
-    // Set background color if saved
-    if (buttonData[index]?.color) {
-        btn.style.backgroundColor = buttonData[index].color;
-    }
-    btn.onclick = () => {
-        if (audioClips[index] && !isMuted) {
-            audioClips[index].play();
-        } else {
-            alert('No audio assigned to this button.');
-        }
-    };
-    buttonContainer.appendChild(btn);
-    buttons[index] = btn;
-    // Populate assign dropdown
-    const option = document.createElement('option');
-    option.value = index;
-    option.textContent = `Button ${i}`;
-    assignSelect.appendChild(option);
-    // Populate custom dropdown
-    const option2 = document.createElement('option');
-    option2.value = index;
-    option2.textContent = `Button ${i}`;
-    customSelect.appendChild(option2);
+  };
+  container.appendChild(btn);
+  buttons[index] = btn;
+
+  // Populate dropdowns
+  const option = document.createElement('option');
+  option.value = index;
+  option.textContent = `Button ${i}`;
+  assignSelect.appendChild(option);
+  const option2 = document.createElement('option');
+  option2.value = index;
+  option2.textContent = `Button ${i}`;
+  customSelect.appendChild(option2);
 }
 
-/* Load saved audio from local storage */
+/* Load saved audio files */
 async function loadAudio() {
-    for (let i=0; i<100; i++) {
-        const base64 = localStorage.getItem(`audio_${i}`);
-        if (base64) {
-            const blob = base64ToBlob(base64, 'audio/webm');
-            audioClips[i] = new Audio(URL.createObjectURL(blob));
-        }
+  for (let i=0; i<100; i++) {
+    const base64 = localStorage.getItem(`audio_${i}`);
+    if (base64) {
+      const blob = base64ToBlob(base64, 'audio/webm');
+      audioClips[i] = new Audio(URL.createObjectURL(blob));
     }
+  }
 }
 loadAudio();
 
-/* Recording logic omitted for brevity - use your existing code here */
+/* Recording logic (use your existing code here) */
 let mediaRecorder;
 let chunks = [];
 let recordedBlob = null;
 
 document.getElementById('startRecord').onclick = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    mediaRecorder = new MediaRecorder(stream);
-    chunks = [];
-    mediaRecorder.ondataavailable = e => chunks.push(e.data);
-    mediaRecorder.onstop = () => {
-        recordedBlob = new Blob(chunks, {type: 'audio/webm'});
-        document.getElementById('assignBtn').disabled = false;
-        document.getElementById('recordStatus').textContent = 'Finished recording.';
-    };
-    mediaRecorder.start();
+  const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+  mediaRecorder = new MediaRecorder(stream);
+  chunks = [];
+  mediaRecorder.ondataavailable = e => chunks.push(e.data);
+  mediaRecorder.onstop = () => {
+    recordedBlob = new Blob(chunks, {type: 'audio/webm'});
+    document.getElementById('assignBtn').disabled = false;
+    document.getElementById('recordStatus').textContent = 'Finished recording.';
+  };
+  mediaRecorder.start();
 };
 document.getElementById('stopRecord').onclick = () => {
-    mediaRecorder.stop();
+  mediaRecorder.stop();
 };
 
-/* Assign recorded audio to selected button */
+/* Assign recorded audio to button */
 document.getElementById('assignBtn').onclick = async () => {
-    if (!recordedBlob) return;
-    const index = assignSelect.value;
-    audioClips[index] = new Audio(URL.createObjectURL(recordedBlob));
-    const base64 = await blobToBase64(recordedBlob);
-    localStorage.setItem(`audio_${index}`, base64);
-    // Remove unassigned class if exists
-    buttons[index].classList.remove('unassigned');
-    alert(`Audio assigned to Button ${parseInt(index)+1}`);
+  if (!recordedBlob) return;
+  const index = assignSelect.value;
+  audioClips[index] = new Audio(URL.createObjectURL(recordedBlob));
+  const base64 = await blobToBase64(recordedBlob);
+  localStorage.setItem(`audio_${index}`, base64);
+  // Remove unassigned class
+  buttons[index].classList.remove('unassigned');
+  alert(`Audio assigned to Button ${parseInt(index)+1}`);
 };
 
 /* Save button customizations */
@@ -430,48 +352,42 @@ const customColorInput = document.getElementById('customColor');
 const saveBtn = document.getElementById('saveCustom');
 
 customSelect.onchange = () => {
-    const index = customSelect.value;
-    customNameInput.value = buttonData[index]?.name || `Button ${parseInt(index)+1}`;
-    customColorInput.value = buttonData[index]?.color || '#ffffff';
+  const index = customSelect.value;
+  customNameInput.value = buttonData[index]?.name || `Button ${parseInt(index)+1}`;
+  customColorInput.value = buttonData[index]?.color || '#ffffff';
 };
 
 saveBtn.onclick = () => {
-    const index = customSelect.value;
-    const name = customNameInput.value.trim();
-    const color = customColorInput.value;
-    buttonData[index] = {name, color};
-    // Update button text and style
-    buttons[index].textContent = name;
-    buttons[index].style.backgroundColor = color;
-    localStorage.setItem('buttonData', JSON.stringify(buttonData));
+  const index = customSelect.value;
+  const name = customNameInput.value.trim();
+  const color = customColorInput.value;
+  buttonData[index] = {name, color};
+  // Update button appearance
+  buttons[index].textContent = name;
+  buttons[index].style.backgroundColor = color;
+  localStorage.setItem('buttonData', JSON.stringify(buttonData));
 };
 
-/* Blob <-> Base64 helpers */
+/* Blob helpers */
 function blobToBase64(blob) {
-    return new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-        reader.readAsDataURL(blob);
-    });
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+    reader.readAsDataURL(blob);
+  });
 }
 function base64ToBlob(base64, mime) {
-    const b = atob(base64);
-    const array = new Uint8Array(b.length);
-    for (let i=0; i<b.length; i++) array[i] = b.charCodeAt(i);
-    return new Blob([array], {type: mime});
+  const b = atob(base64);
+  const array = new Uint8Array(b.length);
+  for (let i=0; i<b.length; i++) array[i] = b.charCodeAt(i);
+  return new Blob([array], {type: mime});
 }
 
 /* Volume toggle */
 document.getElementById('volume-btn').onclick = () => {
-    isMuted = !isMuted;
-    document.getElementById('volume-btn').textContent = isMuted ? '🔇' : '🔊';
+  isMuted = !isMuted;
+  document.getElementById('volume-btn').textContent = isMuted ? '🔇' : '🔊';
 };
-
-/* Apply saved theme on load */
-const savedTheme = localStorage.getItem('theme') || 'light';
-applyTheme(savedTheme);
-document.getElementById('themeSelect').value = savedTheme;
-
 </script>
 </body>
 </html>
