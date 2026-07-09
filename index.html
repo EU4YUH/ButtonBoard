@@ -18,6 +18,47 @@
         --hover-scale: scale(1.05);
     }
 
+    /* New themes added below for dynamic switching */
+    /* Sunset Theme */
+    :root.theme-sunset {
+        --bg-color: #ffe5b4;
+        --text-color: #502b0b;
+        --primary-color: #ff7e5f;
+        --secondary-color: #feb47b;
+        --hover-bg-color: #ffd6a5;
+        --button-bg: linear-gradient(135deg, #ff7e5f, #feb47b);
+        --button-shadow: rgba(0,0,0,0.2);
+        --panel-bg: #fff3e0;
+        --panel-shadow: rgba(0,0,0,0.1);
+        --hover-shadow: rgba(0,0,0,0.2);
+    }
+    /* Midnight Theme */
+    :root.theme-midnight {
+        --bg-color: #0d1b2a;
+        --text-color: #f0f0f0;
+        --primary-color: #3fc1c9;
+        --secondary-color: #ee6c4e;
+        --hover-bg-color: #1b263b;
+        --button-bg: #1b263b;
+        --button-shadow: rgba(0,0,0,0.4);
+        --panel-bg: #1b263b;
+        --panel-shadow: rgba(0,0,0,0.4);
+        --hover-shadow: rgba(0,0,0,0.6);
+    }
+    /* Neon Theme */
+    :root.theme-neon {
+        --bg-color: #000;
+        --text-color: #0ff;
+        --primary-color: #f0f;
+        --secondary-color: #0ff;
+        --hover-bg-color: #222;
+        --button-bg: linear-gradient(45deg, #ff00cc, #00ffff);
+        --button-shadow: rgba(0,255,255,0.3);
+        --panel-bg: #111;
+        --panel-shadow: rgba(0,0,0,0.5);
+        --hover-shadow: rgba(0,0,0,0.7);
+    }
+
     body {
         font-family: "Inter", Arial, sans-serif;
         padding: 30px;
@@ -298,10 +339,48 @@ const themes = {
         '--panel-bg': '#fffde7',
         '--panel-shadow': 'rgba(0,0,0,0.08)',
         '--hover-shadow': 'rgba(0,0,0,0.18)',
+    },
+    sunset: {
+        '--bg-color': '#ffe5b4',
+        '--text-color': '#502b0b',
+        '--primary-color': '#ff7e5f',
+        '--secondary-color': '#feb47b',
+        '--hover-bg-color': '#ffd6a5',
+        '--button-bg': 'linear-gradient(135deg, #ff7e5f, #feb47b)',
+        '--button-shadow': 'rgba(0,0,0,0.2)',
+        '--panel-bg': '#fff3e0',
+        '--panel-shadow': 'rgba(0,0,0,0.1)',
+        '--hover-shadow': 'rgba(0,0,0,0.2)',
+    },
+    midnight: {
+        '--bg-color': '#0d1b2a',
+        '--text-color': '#f0f0f0',
+        '--primary-color': '#3fc1c9',
+        '--secondary-color': '#ee6c4e',
+        '--hover-bg-color': '#1b263b',
+        '--button-bg': '#1b263b',
+        '--button-shadow': 'rgba(0,0,0,0.4)',
+        '--panel-bg': '#1b263b',
+        '--panel-shadow': 'rgba(0,0,0,0.4)',
+        '--hover-shadow': 'rgba(0,0,0,0.6)',
+    },
+    neon: {
+        '--bg-color': '#000',
+        '--text-color': '#0ff',
+        '--primary-color': '#f0f',
+        '--secondary-color': '#0ff',
+        '--hover-bg-color': '#222',
+        '--button-bg': 'linear-gradient(45deg, #ff00cc, #00ffff)',
+        '--button-shadow': 'rgba(0,255,255,0.3)',
+        '--panel-bg': '#111',
+        '--panel-shadow': 'rgba(0,0,0,0.5)',
+        '--hover-shadow': 'rgba(0,0,0,0.7)',
     }
 };
 
 function applyTheme(themeName) {
+    document.documentElement.className = ''; // Reset classes
+    document.documentElement.classList.add(`theme-${themeName}`);
     const theme = themes[themeName];
     for (let varName in theme) {
         document.documentElement.style.setProperty(varName, theme[varName]);
@@ -312,6 +391,15 @@ function applyTheme(themeName) {
 const savedTheme = localStorage.getItem('theme') || 'light';
 applyTheme(savedTheme);
 themeSelect.value = savedTheme;
+
+// Populate theme options dynamically
+for (const themeName in themes) {
+    const option = document.createElement('option');
+    option.value = themeName;
+    option.textContent = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+    if (themeName === savedTheme) option.selected = true;
+    themeSelect.appendChild(option);
+}
 
 themeSelect.onchange = () => {
     const selectedTheme = themeSelect.value;
@@ -471,12 +559,6 @@ volumeBtn.onclick = () => {
     isMuted = !isMuted;
     volumeBtn.textContent = isMuted ? "🔇" : "🔊";
 };
-
-/* -------------------------
-   Apply theme on load
---------------------------*/
-// Already handled above by applyTheme() and local storage
-
 </script>
 </body>
 </html>
