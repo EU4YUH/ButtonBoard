@@ -18,7 +18,59 @@
     --panel-shadow: rgba(0,0,0,0.08);
     --hover-shadow: rgba(0,0,0,0.18);
   }
-  /* ... [CSS styles omitted for brevity; same as previous, include all styles from earlier] ... */
+
+  /* Extended themes with classes */
+  :root.theme-vibrant {
+    --bg-color: #ffe600;
+    --text-color: #222;
+    --primary-color: #ff3b00;
+    --secondary-color: #00b4d8;
+    --hover-bg-color: #ffe600;
+    --button-bg: linear-gradient(135deg, #ff3b00, #00b4d8);
+    --button-shadow: rgba(0,0,0,0.2);
+    --panel-bg: #fff8dc;
+    --panel-shadow: rgba(0,0,0,0.1);
+    --hover-shadow: rgba(0,0,0,0.2);
+  }
+
+  :root.theme-pastel {
+    --bg-color: #f8e2f9;
+    --text-color: #555;
+    --primary-color: #a7c7e7;
+    --secondary-color: #f7c59f;
+    --hover-bg-color: #f7c59f;
+    --button-bg: #fde2e2;
+    --button-shadow: rgba(0,0,0,0.1);
+    --panel-bg: #fff0f5;
+    --panel-shadow: rgba(0,0,0,0.08);
+    --hover-shadow: rgba(0,0,0,0.15);
+  }
+
+  :root.theme-metallic {
+    --bg-color: #1c1c1c;
+    --text-color: #e0e0e0;
+    --primary-color: #b0c4de;
+    --secondary-color: #ffd700;
+    --hover-bg-color: #333;
+    --button-bg: linear-gradient(135deg, #b0c4de, #ffd700);
+    --button-shadow: rgba(0,0,0,0.4);
+    --panel-bg: #2b2b2b;
+    --panel-shadow: rgba(0,0,0,0.5);
+    --hover-shadow: rgba(0,0,0,0.7);
+  }
+
+  /* Basic styles */
+  body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    padding: 30px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+    position: relative;
+  }
+
   /* Error message styling */
   #errorMessage {
     position: fixed;
@@ -35,10 +87,193 @@
     display: none;
     font-family: 'Montserrat', sans-serif;
   }
+
+  /* Logo/header styling */
+  #logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  #logo {
+    height: 60px;
+    width: 60px;
+    margin-right: 15px;
+  }
+  #logo-text {
+    font-size: 2em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+  }
+
+  /* Theme selector styling */
+  #themeSelect {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+    z-index: 10;
+  }
+
+  #themeSelect:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: scale(1.02);
+  }
+
+  /* Volume button styles */
+  #volume-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-size: 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+
+  #volume-btn:hover {
+    background: var(--hover-bg-color);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+  }
+
+  /* Main headings */
+  h1 {
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-size: 2em;
+  }
+
+  h2 {
+    margin-top: 30px;
+    font-weight: 500;
+    border-left: 5px solid var(--primary-color);
+    padding-left: 10px;
+    color: var(--primary-color);
+    font-size: 1.5em;
+  }
+
+  /* Panels style */
+  .panel {
+    background: var(--panel-bg);
+    padding: 20px;
+    margin-top: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px var(--panel-shadow);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .panel:hover {
+    box-shadow: 0 8px 20px var(--hover-shadow);
+    transform: translateY(-2px);
+  }
+
+  /* Button grid styles */
+  #buttons {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  #buttons button {
+    padding: 16px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: none;
+    background: var(--button-bg);
+    box-shadow: 0 2px 6px var(--button-shadow);
+    transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+  }
+  #buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px var(--hover-shadow);
+    background-color: var(--hover-bg-color);
+  }
+
+  /* Recording controls styles */
+  #recording-controls button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    margin-right: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background: var(--primary-color);
+    color: white;
+    transition: background 0.2s, transform 0.2s;
+  }
+  #recording-controls button:disabled {
+    background: #9bbfe9;
+    cursor: default;
+    opacity: 0.6;
+  }
+  #recording-controls button:hover:not(:disabled) {
+    background: #3574c9;
+    transform: scale(1.05);
+  }
+
+  /* Customizer styles */
+  #customizer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px;
+  }
+  #saveCustom {
+    padding: 10px 16px;
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    font-size: 14px;
+  }
+  #saveCustom:hover {
+    background: #1f8c4c;
+    transform: scale(1.05);
+  }
+  /* Inputs styling */
+  select, input[type="text"], input[type="color"] {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 14px;
+    transition: box-shadow 0.2s;
+  }
+  select:focus, input[type="text"]:focus, input[type="color"]:focus {
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.5);
+    outline: none;
+  }
 </style>
 </head>
 <body>
 
+<!-- Error message display -->
 <div id="errorMessage"></div>
 
 <!-- Logo/Header -->
@@ -48,8 +283,16 @@
 </div>
 
 <!-- Theme selector -->
-<select id="themeSelect" title="Choose Theme">...</select>
-<!-- Volume Button -->
+<select id="themeSelect" title="Choose Theme">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="colorful">Colorful</option>
+  <option value="vibrant">Vibrant</option>
+  <option value="pastel">Pastel</option>
+  <option value="metallic">Metallic</option>
+</select>
+
+<!-- Volume toggle button -->
 <button id="volume-btn" title="Toggle Mute">🔊</button>
 
 <h2>Recording</h2>
@@ -57,6 +300,7 @@
     <button id="startRecord">Start Recording</button>
     <button id="stopRecord" disabled>Stop Recording</button>
     <p id="recordStatus">Not recording.</p>
+
     <label>
         Program to button:
         <select id="assignSelect"></select>
@@ -65,7 +309,24 @@
 </div>
 
 <h2>Customize Buttons</h2>
-<div id="customizer" class="panel">...</div>
+<div id="customizer" class="panel">
+    <label>
+        Select Button:
+        <select id="customSelect"></select>
+    </label>
+
+    <label>
+        Name:
+        <input type="text" id="customName" />
+    </label>
+
+    <label>
+        Color:
+        <input type="color" id="customColor" />
+    </label>
+
+    <button id="saveCustom">Save Changes</button>
+</div>
 
 <h2>Soundboard</h2>
 <div id="buttons" class="panel"></div>
@@ -74,16 +335,109 @@
 /* -------------------------
    Theme management (same as previous, omitted here for brevity, include full code in actual implementation) */
 const themeSelect = document.getElementById('themeSelect');
-const themes = { /* ... themes object ... */ };
-function applyTheme(themeName) { /* ... */ }
+const themes = {
+  light: {
+    '--bg-color': '#f5f6fa',
+    '--text-color': '#333',
+    '--primary-color': '#4a90e2',
+    '--secondary-color': '#27ae60',
+    '--hover-bg-color': '#f0f0f0',
+    '--button-bg': '#fff',
+    '--button-shadow': 'rgba(0,0,0,0.1)',
+    '--panel-bg': '#fff',
+    '--panel-shadow': 'rgba(0,0,0,0.08)',
+    '--hover-shadow': 'rgba(0,0,0,0.18)',
+  },
+  dark: {
+    '--bg-color': '#222',
+    '--text-color': '#eee',
+    '--primary-color': '#66ccff',
+    '--secondary-color': '#55cc66',
+    '--hover-bg-color': '#444',
+    '--button-bg': '#333',
+    '--button-shadow': 'rgba(0,0,0,0.3)',
+    '--panel-bg': '#333',
+    '--panel-shadow': 'rgba(0,0,0,0.4)',
+    '--hover-shadow': 'rgba(0,0,0,0.6)',
+  },
+  colorful: {
+    '--bg-color': '#fff8e1',
+    '--text-color': '#444',
+    '--primary-color': '#e91e63',
+    '--secondary-color': '#ff9800',
+    '--hover-bg-color': '#ffe0b2',
+    '--button-bg': '#fff3e0',
+    '--button-shadow': 'rgba(0,0,0,0.1)',
+    '--panel-bg': '#fffde7',
+    '--panel-shadow': 'rgba(0,0,0,0.08)',
+    '--hover-shadow': 'rgba(0,0,0,0.18)',
+  },
+  vibrant: {
+    '--bg-color': '#ffe600',
+    '--text-color': '#222',
+    '--primary-color': '#ff3b00',
+    '--secondary-color': '#00b4d8',
+    '--hover-bg-color': '#ffe600',
+    '--button-bg': 'linear-gradient(135deg, #ff3b00, #00b4d8)',
+    '--button-shadow': 'rgba(0,0,0,0.2)',
+    '--panel-bg': '#fff8dc',
+    '--panel-shadow': 'rgba(0,0,0,0.1)',
+    '--hover-shadow': 'rgba(0,0,0,0.2)',
+  },
+  pastel: {
+    '--bg-color': '#f8e2f9',
+    '--text-color': '#555',
+    '--primary-color': '#a7c7e7',
+    '--secondary-color': '#f7c59f',
+    '--hover-bg-color': '#f7c59f',
+    '--button-bg': '#fde2e2',
+    '--button-shadow': 'rgba(0,0,0,0.1)',
+    '--panel-bg': '#fff0f5',
+    '--panel-shadow': 'rgba(0,0,0,0.08)',
+    '--hover-shadow': 'rgba(0,0,0,0.15)',
+  },
+  metallic: {
+    '--bg-color': '#1c1c1c',
+    '--text-color': '#e0e0e0',
+    '--primary-color': '#b0c4de',
+    '--secondary-color': '#ffd700',
+    '--hover-bg-color': '#333',
+    '--button-bg': 'linear-gradient(135deg, #b0c4de, #ffd700)',
+    '--button-shadow': 'rgba(0,0,0,0.4)',
+    '--panel-bg': '#2b2b2b',
+    '--panel-shadow': 'rgba(0,0,0,0.5)',
+    '--hover-shadow': 'rgba(0,0,0,0.7)',
+  }
+};
+
+function applyTheme(themeName) {
+  document.body.className = '';
+  document.body.classList.remove('theme-vibrant', 'theme-pastel', 'theme-metallic');
+  document.body.classList.add(`theme-${themeName}`);
+  const theme = themes[themeName];
+  for (let varName in theme) {
+    document.documentElement.style.setProperty(varName, theme[varName]);
+  }
+}
+
+// Load saved theme or default
 const savedTheme = localStorage.getItem('theme') || 'light';
 applyTheme(savedTheme);
 document.getElementById('themeSelect').value = savedTheme;
+
+// Populate theme options dynamically
 for (const themeName in themes) {
-  /* ... populate options ... */
+  const option = document.createElement('option');
+  option.value = themeName;
+  option.textContent = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+  if (themeName === savedTheme) option.selected = true;
+  document.getElementById('themeSelect').appendChild(option);
 }
+
 document.getElementById('themeSelect').onchange = () => {
-  /* ... apply theme ... */
+  const selectedTheme = document.getElementById('themeSelect').value;
+  localStorage.setItem('theme', selectedTheme);
+  applyTheme(selectedTheme);
 };
 
 /* -------------------------
@@ -101,32 +455,65 @@ let isMuted = false;
 
 /* Show error message */
 function showError(message) {
-    errorDiv.textContent = message;
-    errorDiv.style.display = 'block';
-    setTimeout(() => {
-        errorDiv.style.display = 'none';
-    }, 5000);
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+  setTimeout(() => {
+    errorDiv.style.display = 'none';
+  }, 5000);
 }
 
-/* Generate buttons */
+/* Generate buttons dynamically */
 for (let i = 1; i <= 100; i++) {
-   /* ... button creation code ... */
+  const index = i - 1;
+  const btn = document.createElement("button");
+  btn.textContent = buttonData[index]?.name || ("Button " + i);
+  btn.style.backgroundColor = buttonData[index]?.color || "";
+  btn.dataset.index = index;
+
+  btn.addEventListener("click", () => {
+    if (audioClips[index]) {
+      if (!isMuted) {
+        try {
+          audioClips[index].play();
+        } catch (err) {
+          showError("Error playing audio for Button " + (index + 1));
+          console.error(err);
+        }
+      }
+    } else {
+      showError("No audio saved for Button " + (index + 1));
+    }
+  });
+
+  buttonContainer.appendChild(btn);
+  buttons[index] = btn;
+
+  // Populate dropdowns
+  const opt = document.createElement("option");
+  opt.value = index;
+  opt.textContent = "Button " + i;
+  assignSelect.appendChild(opt);
+
+  const opt2 = document.createElement("option");
+  opt2.value = index;
+  opt2.textContent = "Button " + i;
+  customSelect.appendChild(opt2);
 }
 
-/* Load saved audio */
+/* Load saved audio from localStorage */
 async function loadSavedAudio() {
-    for (let i = 0; i < 100; i++) {
-        const base64 = localStorage.getItem("audio_" + i);
-        if (base64) {
-            try {
-                const blob = base64ToBlob(base64, "audio/webm");
-                audioClips[i] = new Audio(URL.createObjectURL(blob));
-            } catch (err) {
-                showError("Error loading audio for Button " + (i + 1));
-                console.error(err);
-            }
-        }
+  for (let i = 0; i < 100; i++) {
+    const base64 = localStorage.getItem("audio_" + i);
+    if (base64) {
+      try {
+        const blob = base64ToBlob(base64, "audio/webm");
+        audioClips[i] = new Audio(URL.createObjectURL(blob));
+      } catch (err) {
+        showError("Error loading audio for Button " + (i + 1));
+        console.error(err);
+      }
     }
+  }
 }
 loadSavedAudio();
 
@@ -141,236 +528,217 @@ const assignBtn = document.getElementById("assignBtn");
 const statusText = document.getElementById("recordStatus");
 
 startBtn.onclick = async () => {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        chunks = [];
-        recordedAudioBlob = null;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    chunks = [];
+    recordedAudioBlob = null;
 
-        mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-        mediaRecorder.onstop = async () => {
-            const rawBlob = new Blob(chunks, { type: "audio/webm" });
-            // Trim silence
-            try {
-                const trimmedBlob = await trimSilence(rawBlob);
-                recordedAudioBlob = trimmedBlob;
-                // Enable assign button
-                assignBtn.disabled = false;
-                document.getElementById("recordStatus").textContent = "Recording finished. Ready to assign.";
-            } catch (err) {
-                showError("Error trimming silence");
-                console.error(err);
-            }
-        };
-
-        mediaRecorder.start();
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-        statusText.textContent = "Recording...";
-    } catch (err) {
-        showError("Error accessing microphone");
+    mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+    mediaRecorder.onstop = async () => {
+      const rawBlob = new Blob(chunks, { type: "audio/webm" });
+      // Trim silence
+      try {
+        const trimmedBlob = await trimSilence(rawBlob);
+        recordedAudioBlob = trimmedBlob;
+        // Enable assign button
+        assignBtn.disabled = false;
+        document.getElementById("recordStatus").textContent = "Finished. Ready to assign.";
+      } catch (err) {
+        showError("Error trimming silence");
         console.error(err);
-    }
+      }
+    };
+
+    mediaRecorder.start();
+    document.getElementById("startRecord").disabled = true;
+    document.getElementById("stopRecord").disabled = false;
+    statusText.textContent = "Recording...";
+  } catch (err) {
+    showError("Error accessing microphone");
+    console.error(err);
+  }
 };
 
-stopBtn.onclick = () => {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-        try {
-            mediaRecorder.stop();
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-        } catch (err) {
-            showError("Error stopping recording");
-            console.error(err);
-        }
+document.getElementById("stopRecord").onclick = () => {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    try {
+      mediaRecorder.stop();
+      document.getElementById("startRecord").disabled = false;
+      document.getElementById("stopRecord").disabled = true;
+    } catch (err) {
+      showError("Error stopping recording");
+      console.error(err);
     }
+  }
 };
 
-/* Assign recorded audio to button */
+/* Save to storage after trimming silence */
 const blobToBase64 = (blob) => {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(",")[1]);
-        reader.readAsDataURL(blob);
-    });
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(",")[1]);
+    reader.readAsDataURL(blob);
+  });
 };
 
 async function trimSilence(blob, silenceThreshold = 0.02, minSilenceDuration = 0.2) {
-    const arrayBuffer = await blob.arrayBuffer();
-    const audioCtx = new AudioContext();
-    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-    const { numberOfChannels, length, sampleRate } = audioBuffer;
-    const channelData = [];
+  const arrayBuffer = await blob.arrayBuffer();
+  const audioCtx = new AudioContext();
+  const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+  const { numberOfChannels, length, sampleRate } = audioBuffer;
+  const channelData = [];
+  for (let ch = 0; ch < numberOfChannels; ch++) {
+    channelData[ch] = audioBuffer.getChannelData(ch);
+  }
+
+  const silenceSamples = minSilenceDuration * sampleRate;
+  let startSample = 0;
+  let endSample = length - 1;
+
+  // Find start index
+  for (let i = 0; i < length; i++) {
+    let maxSample = 0;
     for (let ch = 0; ch < numberOfChannels; ch++) {
-        channelData[ch] = audioBuffer.getChannelData(ch);
+      maxSample = Math.max(maxSample, Math.abs(channelData[ch][i]));
     }
-
-    const silenceSamples = minSilenceDuration * sampleRate;
-    let startSample = 0;
-    let endSample = length - 1;
-
-    // Find start index
-    for (let i = 0; i < length; i++) {
-        let maxSample = 0;
-        for (let ch = 0; ch < numberOfChannels; ch++) {
-            maxSample = Math.max(maxSample, Math.abs(channelData[ch][i]));
-        }
-        if (maxSample > silenceThreshold) {
-            startSample = i;
-            break;
-        }
+    if (maxSample > silenceThreshold) {
+      startSample = i;
+      break;
     }
+  }
 
-    // Find end index
-    for (let i = length - 1; i >= 0; i--) {
-        let maxSample = 0;
-        for (let ch = 0; ch < numberOfChannels; ch++) {
-            maxSample = Math.max(maxSample, Math.abs(channelData[ch][i]));
-        }
-        if (maxSample > silenceThreshold) {
-            endSample = i;
-            break;
-        }
+  // Find end index
+  for (let i = length - 1; i >= 0; i--) {
+    let maxSample = 0;
+    for (let ch = 0; ch < numberOfChannels; ch++) {
+      maxSample = Math.max(maxSample, Math.abs(channelData[ch][i]));
     }
+    if (maxSample > silenceThreshold) {
+      endSample = i;
+      break;
+    }
+  }
 
-    // Crop the buffer
-    const croppedLength = endSample - startSample + 1;
-    const newBuffer = audioCtx.createBuffer(
-        numberOfChannels,
-        croppedLength,
-        sampleRate
+  // Crop the buffer
+  const croppedLength = endSample - startSample + 1;
+  const newBuffer = audioCtx.createBuffer(
+    numberOfChannels,
+    croppedLength,
+    sampleRate
+  );
+
+  for (let ch = 0; ch < numberOfChannels; ch++) {
+    newBuffer.copyToChannel(
+      channelData[ch].slice(startSample, endSample + 1),
+      ch,
+      0
     );
+  }
 
-    for (let ch = 0; ch < numberOfChannels; ch++) {
-        newBuffer.copyToChannel(
-            channelData[ch].slice(startSample, endSample + 1),
-            ch,
-            0
-        );
-    }
-
-    // Convert to Blob
-    const trimmedBlob = await bufferToBlob(newBuffer);
-    return trimmedBlob;
+  // Convert to Blob
+  const trimmedBlob = await bufferToBlob(newBuffer);
+  return trimmedBlob;
 }
 
 function bufferToBlob(audioBuffer) {
-    // Basic WAV encoder for simplicity
-    return new Promise((resolve, reject) => {
-        const offlineCtx = new OfflineAudioContext(
-            audioBuffer.numberOfChannels,
-            audioBuffer.length,
-            audioBuffer.sampleRate
-        );
-        const bufferSource = offlineCtx.createBufferSource();
-        bufferSource.buffer = audioBuffer;
-        bufferSource.connect(offlineCtx.destination);
-        bufferSource.start();
+  return new Promise((resolve, reject) => {
+    const offlineCtx = new OfflineAudioContext(
+      audioBuffer.numberOfChannels,
+      audioBuffer.length,
+      audioBuffer.sampleRate
+    );
+    const bufferSource = offlineCtx.createBufferSource();
+    bufferSource.buffer = audioBuffer;
+    bufferSource.connect(offlineCtx.destination);
+    bufferSource.start();
 
-        offlineCtx.startRendering().then(renderedBuffer => {
-            const wavData = encodeWAV(renderedBuffer);
-            resolve(new Blob([wavData], { type: 'audio/wav' }));
-        }).catch(reject);
-    });
+    offlineCtx.startRendering().then(renderedBuffer => {
+      const wavData = encodeWAV(renderedBuffer);
+      resolve(new Blob([wavData], { type: "audio/wav" }));
+    }).catch(reject);
+  });
 }
 
-// WAV encoding (simplified)
+// Encode WAV (simple implementation)
 function encodeWAV(audioBuffer) {
-    const numChannels = audioBuffer.numberOfChannels;
-    const sampleRate = audioBuffer.sampleRate;
-    const format = 1; // PCM
-    const bitDepth = 16;
-    const samples = flattenBuffer(audioBuffer);
-    const byteRate = sampleRate * numChannels * bitDepth / 8;
-    const blockAlign = numChannels * bitDepth / 8;
-    const dataSize = samples.length * 2;
+  const numChannels = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const format = 1; // PCM
+  const bitDepth = 16;
+  const samples = flattenBuffer(audioBuffer);
+  const dataSize = samples.length * 2;
 
-    const buffer = new ArrayBuffer(44 + dataSize);
-    const view = new DataView(buffer);
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
 
-    /* RIFF identifier */
-    writeString(view, 0, 'RIFF');
-    /* file length */
-    view.setUint32(4, 36 + dataSize, true);
-    /* RIFF type */
-    writeString(view, 8, 'WAVE');
-    /* format chunk identifier */
-    writeString(view, 12, 'fmt ');
-    /* format chunk length */
-    view.setUint32(16, 16, true);
-    /* sample format (raw) */
-    view.setUint16(20, format, true);
-    /* number of channels */
-    view.setUint16(22, numChannels, true);
-    /* sample rate */
-    view.setUint32(24, sampleRate, true);
-    /* byte rate */
-    view.setUint32(28, byteRate, true);
-    /* block align */
-    view.setUint16(32, blockAlign, true);
-    /* bits per sample */
-    view.setUint16(34, bitDepth, true);
-    /* data chunk identifier */
-    writeString(view, 36, 'data');
-    /* data chunk length */
-    view.setUint32(40, dataSize, true);
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, 'WAVE');
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, format, true);
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numChannels * bitDepth / 8, true);
+  view.setUint16(32, numChannels * bitDepth / 8, true);
+  view.setUint16(34, bitDepth, true);
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
 
-    // Write samples
-    let offset = 44;
-    for (let i = 0; i < samples.length; i++, offset += 2) {
-        const s = Math.max(-1, Math.min(1, samples[i]));
-        view.setInt16(offset, s * 32767, true);
+  let offset = 44;
+  for (let i = 0; i < samples.length; i++, offset += 2) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(offset, s * 32767, true);
+  }
+
+  function writeString(view, offset, string) {
+    for (let i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
     }
+  }
 
-    function writeString(view, offset, string) {
-        for (let i = 0; i < string.length; i++) {
-            view.setUint8(offset + i, string.charCodeAt(i));
-        }
+  function flattenBuffer(audioBuffer) {
+    const channels = [];
+    for (let ch = 0; ch < audioBuffer.numberOfChannels; ch++) {
+      channels.push(audioBuffer.getChannelData(ch));
     }
-
-    // flatten buffer
-    function flattenBuffer(audioBuffer) {
-        const channels = [];
-        for (let ch = 0; ch < audioBuffer.numberOfChannels; ch++) {
-            channels.push(audioBuffer.getChannelData(ch));
-        }
-        const length = channels[0].length;
-        const result = new Float32Array(length * channels.length);
-        for (let i = 0; i < length; i++) {
-            for (let ch = 0; ch < channels.length; ch++) {
-                result[i * channels.length + ch] = channels[ch][i];
-            }
-        }
-        return result;
+    const length = channels[0].length;
+    const result = new Float32Array(length * channels.length);
+    for (let i = 0; i < length; i++) {
+      for (let ch = 0; ch < channels.length; ch++) {
+        result[i * channels.length + ch] = channels[ch][i];
+      }
     }
+    return result;
+  }
 
-    return buffer;
+  return buffer;
 }
 
-/* Save recording to button */
+/* Save recorded audio to button */
 const assignButton = document.getElementById("assignBtn");
 assignButton.onclick = async () => {
-    const index = assignSelect.value;
-    if (!recordedAudioBlob) {
-        showError("No recording to assign");
-        return;
-    }
-    try {
-        const base64 = await blobToBase64(recordedAudioBlob);
-        localStorage.setItem("audio_" + index, base64);
-        await loadSavedAudio();
-        alert("Saved to Button " + (parseInt(index) + 1));
-    } catch (err) {
-        showError("Error saving audio");
-        console.error(err);
-    }
+  const index = assignSelect.value;
+  if (!recordedAudioBlob) {
+    showError("No recording to assign");
+    return;
+  }
+  try {
+    const base64 = await blobToBase64(recordedAudioBlob);
+    localStorage.setItem("audio_" + index, base64);
+    await loadSavedAudio();
+    alert("Saved to Button " + (parseInt(index) + 1));
+  } catch (err) {
+    showError("Error saving audio");
+    console.error(err);
+  }
 };
 
-/* Remaining UI handlers for customizing buttons, mute toggle, etc. (same as previous, omitted here for brevity) */
-
-volumeBtn.onclick = () => {
-    isMuted = !isMuted;
-    volumeBtn.textContent = isMuted ? "🔇" : "🔊";
+/* Remaining handlers for customizing buttons, mute toggle, etc. (Same as previous code) */
+document.getElementById("volume-btn").onclick = () => {
+  isMuted = !isMuted;
+  document.getElementById("volume-btn").textContent = isMuted ? "🔇" : "🔊";
 };
 </script>
 </body>
