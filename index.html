@@ -2,168 +2,303 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>100 Buttons Soundboard</title>
+<title>Advanced 100 Button Soundboard</title>
+<!-- Google Fonts for modern font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet" />
 <style>
+  /* CSS Variables for themes */
+  :root {
+    --bg-color: #f5f6fa;
+    --text-color: #333;
+    --primary-color: #4a90e2;
+    --secondary-color: #27ae60;
+    --hover-bg-color: #f0f0f0;
+    --button-bg: #fff;
+    --button-shadow: rgba(0,0,0,0.1);
+    --panel-bg: #fff;
+    --panel-shadow: rgba(0,0,0,0.08);
+    --hover-shadow: rgba(0,0,0,0.18);
+  }
+
+  /* Themes override variables */
   body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f5f6fa;
-    margin: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
     padding: 20px;
   }
-  #logo-container {
+
+  #header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
   }
+
   #logo {
     height: 60px;
     margin-right: 15px;
   }
-  #logo-text {
+
+  #title {
     font-size: 24px;
     font-weight: 600;
   }
-  #buttons {
+
+  /* Buttons grid */
+  #buttons-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 8px;
     margin-top: 20px;
   }
+
   button {
     padding: 12px;
     border-radius: 8px;
     border: none;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background-color: var(--button-bg);
+    box-shadow: 0 2px 6px var(--button-shadow);
     cursor: pointer;
     font-weight: 500;
   }
+
   button:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px var(--hover-shadow);
   }
-  #record-section {
-    margin-top: 20px;
+
+  /* Controls section styles */
+  .section {
+    margin-top: 30px;
+    padding: 15px;
+    background: var(--panel-bg);
+    border-radius: 10px;
+    box-shadow: 0 3px 10px var(--panel-shadow);
+  }
+
+  /* Theme selector */
+  #themeSelector {
+    position: fixed;
+    top: 20px;
+    right: 150px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  /* Volume button style */
+  #volumeControl {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  /* Additional styles for inputs and labels */
+  label {
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  input[type="text"], select, input[type="color"] {
+    margin-top: 5px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  /* Buttons for recording control */
+  #recordButtons {
+    margin-top: 10px;
+  }
+  #recordButtons button {
+    margin-right: 10px;
   }
 </style>
 </head>
 <body>
 
-<div id="logo-container">
+<!-- Header with logo and title -->
+<div id="header">
   <img id="logo" src="https://i.pinimg.com/1200x/0b/8b/18/0b8b18e654a6261fffcd7d6e1561e6c4.jpg" />
-  <div id="logo-text">100 Buttons Soundboard</div>
+  <div id="title">100-Button Soundboard</div>
 </div>
 
-<h3>Recording Controls</h3>
-<div id="record-section" class="panel">
-  <button id="startRecord">Start Recording</button>
-  <button id="stopRecord" disabled>Stop Recording</button>
-  <button id="saveRecording" disabled>Save to Selected Button</button>
-  <br/><br/>
-  <label>Select Button:
-    <select id="buttonSelect"></select>
-  </label>
+<!-- Theme selector and volume control -->
+<select id="themeSelector" title="Select Theme">
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+  <option value="vibrant">Vibrant</option>
+  <option value="pastel">Pastel</option>
+  <option value="metallic">Metallic</option>
+</select>
+<button id="volumeControl" title="Mute/Unmute">🔊</button>
+
+<!-- Recording controls -->
+<div class="section" id="recordSection">
+  <h3>Recording</h3>
+  <div id="recordButtons">
+    <button id="startRecord">Start Recording</button>
+    <button id="stopRecord" disabled>Stop Recording</button>
+    <button id="saveRecord" disabled>Save Recording to Button</button>
+  </div>
+  <label for="selectButton">Select Button:</label>
+  <select id="selectButton"></select>
 </div>
 
+<!-- Buttons grid -->
 <h3>Buttons</h3>
-<div id="buttons"></div>
+<div id="buttonsGrid"></div>
 
+<!-- Scripts -->
 <script>
 // Constants
-const NUM_BUTTONS = 100;
-const buttonsContainer = document.getElementById('buttons');
-const buttonSelect = document.getElementById('buttonSelect');
-const saveBtn = document.getElementById('saveRecording');
-const startBtn = document.getElementById('startRecord');
-const stopBtn = document.getElementById('stopRecord');
+const TOTAL_BUTTONS = 100;
+const buttonsGrid = document.getElementById('buttonsGrid');
+const themeSelector = document.getElementById('themeSelector');
+const volumeBtn = document.getElementById('volumeControl');
+const selectButton = document.getElementById('selectButton');
+const saveRecordBtn = document.getElementById('saveRecord');
 
-// Data structures
-const buttonUrls = new Array(NUM_BUTTONS).fill(null); // Store object URLs for each button
-const buttons = []; // Store button DOM elements
+let isMuted = false;
+let mediaRecorder;
+let recordedChunks = [];
+let currentRecordingBlob = null;
+
+// Data storage
+const buttonAudioUrls = new Array(TOTAL_BUTTONS).fill(null);
+const buttonMeta = {}; // For storing names/colors if needed
 
 // Create buttons dynamically
-for (let i=0; i<NUM_BUTTONS; i++) {
+const buttons = [];
+for (let i=0; i<TOTAL_BUTTONS; i++) {
   const btn = document.createElement('button');
   btn.textContent = `Button ${i+1}`;
   btn.dataset.index = i;
   btn.onclick = () => {
-    if (buttonUrls[i]) {
-      const audio = new Audio(buttonUrls[i]);
-      audio.play();
+    const url = buttonAudioUrls[i];
+    if (url) {
+      const audio = new Audio(url);
+      if (!isMuted) audio.play();
     } else {
-      alert('No recording assigned to this button.');
+      alert('No recording assigned.');
     }
   };
   buttons.push(btn);
-  buttonsContainer.appendChild(btn);
-  // Populate dropdown
+  buttonsGrid.appendChild(btn);
+
+  // Populate select dropdown
   const option = document.createElement('option');
   option.value = i;
   option.textContent = `Button ${i+1}`;
-  buttonSelect.appendChild(option);
+  selectButton.appendChild(option);
 }
 
-// Load saved recordings from localStorage
-function loadRecordings() {
-  for (let i=0; i<NUM_BUTTONS; i++) {
+// Load stored recordings
+function loadStoredRecordings() {
+  for (let i=0; i<TOTAL_BUTTONS; i++) {
     const base64 = localStorage.getItem('audio_'+i);
     if (base64) {
       const blob = base64ToBlob(base64);
       const url = URL.createObjectURL(blob);
-      buttonUrls[i] = url;
+      buttonAudioUrls[i] = url;
     }
   }
 }
-loadRecordings();
+loadStoredRecordings();
+
+// Theme switching
+const themes = {
+  light: {
+    '--bg-color': '#f5f6fa',
+    '--text-color': '#333',
+    '--primary-color': '#4a90e2',
+  },
+  dark: {
+    '--bg-color': '#222',
+    '--text-color': '#eee',
+    '--primary-color': '#66ccff',
+  },
+  vibrant: {
+    '--bg-color': '#ffe600',
+    '--text-color': '#222',
+    '--primary-color': '#ff3b00',
+  },
+  pastel: {
+    '--bg-color': '#f8e2f9',
+    '--text-color': '#555',
+    '--primary-color': '#a7c7e7',
+  },
+  metallic: {
+    '--bg-color': '#1c1c1c',
+    '--text-color': '#e0e0e0',
+    '--primary-color': '#b0c4de',
+  }
+};
+function applyTheme(themeName) {
+  const theme = themes[themeName];
+  for (let varName in theme) {
+    document.documentElement.style.setProperty(varName, theme[varName]);
+  }
+}
+const savedTheme = localStorage.getItem('theme') || 'light';
+applyTheme(savedTheme);
+themeSelector.value = savedTheme;
+themeSelector.onchange = () => {
+  localStorage.setItem('theme', themeSelector.value);
+  applyTheme(themeSelector.value);
+};
 
 // Recording setup
 let mediaRecorder;
 let chunks = [];
-let recordedBlob = null;
-
-startBtn.onclick = async () => {
+document.getElementById('startRecord').onclick = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({audio:true});
   mediaRecorder = new MediaRecorder(stream);
   chunks = [];
   mediaRecorder.ondataavailable = e => chunks.push(e.data);
   mediaRecorder.onstop = () => {
-    recordedBlob = new Blob(chunks, {type:'audio/webm'});
-    document.getElementById('saveRecording').disabled = false;
+    currentRecordingBlob = new Blob(chunks, {type:'audio/webm'});
+    document.getElementById('saveRecord').disabled = false;
   };
   mediaRecorder.start();
-  startBtn.disabled = true;
-  stopBtn.disabled = false;
+  document.getElementById('startRecord').disabled = true;
+  document.getElementById('stopRecord').disabled = false;
 };
-
-stopBtn.onclick = () => {
+document.getElementById('stopRecord').onclick = () => {
   mediaRecorder.stop();
-  startBtn.disabled = false;
-  stopBtn.disabled = true;
+  document.getElementById('startRecord').disabled = false;
+  document.getElementById('stopRecord').disabled = true;
 };
 
-// Save recorded audio to selected button
-document.getElementById('saveRecording').onclick = async () => {
-  const index = parseInt(buttonSelect.value);
-  if (!recordedBlob) return;
-  // Revoke previous URL if exists
-  if (buttonUrls[index]) URL.revokeObjectURL(buttonUrls[index]);
-  const url = URL.createObjectURL(recordedBlob);
-  buttonUrls[index] = url;
-  const base64 = await blobToBase64(recordedBlob);
-  localStorage.setItem('audio_'+index, base64);
-  alert(`Recording assigned to Button ${index+1}`);
-};
-
-// Load recordings with object URLs
-for (let i=0; i<NUM_BUTTONS; i++) {
-  const base64 = localStorage.getItem('audio_'+i);
-  if (base64) {
-    const blob = base64ToBlob(base64);
-    const url = URL.createObjectURL(blob);
-    buttonUrls[i] = url;
+// Save recording to selected button
+document.getElementById('saveRecord').onclick = async () => {
+  const index = parseInt(selectButton.value);
+  if (currentRecordingBlob) {
+    // Revoke old URL if exists
+    if (buttonAudioUrls[index]) URL.revokeObjectURL(buttonAudioUrls[index]);
+    const url = URL.createObjectURL(currentRecordingBlob);
+    buttonAudioUrls[index] = url;
+    const base64 = await blobToBase64(currentRecordingBlob);
+    localStorage.setItem('audio_'+index, base64);
+    alert(`Assigned recording to Button ${index+1}`);
   }
-}
+};
 
-// Helper functions
+// Load saved recordings again after assignment
+// (Already done above in loadStoredRecordings)
+
+// Utility functions
 function base64ToBlob(base64) {
   const binary=atob(base64);
   const array=new Uint8Array(binary.length);
@@ -172,7 +307,6 @@ function base64ToBlob(base64) {
   }
   return new Blob([array], {type:'audio/webm'});
 }
-
 function blobToBase64(blob) {
   return new Promise((resolve) => {
     const reader=new FileReader();
@@ -183,23 +317,25 @@ function blobToBase64(blob) {
   });
 }
 
-// Clean up object URLs on page unload
-window.onunload = () => {
-  for (let url of buttonUrls) {
-    if (url) URL.revokeObjectURL(url);
-  }
-};
+// Set up all buttons for playback
+for (let i=0; i<TOTAL_BUTTONS; i++) {
+  ((i)=>{
+    buttons[i].onclick= () => {
+      if (buttonAudioUrls[i]) {
+        const a = new Audio(buttonAudioUrls[i]);
+        if (!isMuted) a.play();
+      } else {
+        alert('No recording assigned.');
+      }
+    };
+  })(i);
+}
 
 // Mute toggle
-let muted=false;
-const volumeBtn = document.createElement('button');
-volumeBtn.textContent='🔊';
-volumeBtn.onclick=()=>{
-  muted=!muted;
-  volumeBtn.textContent= muted ? '🔇':'🔊';
+document.getElementById('volumeControl').onclick= () => {
+  isMuted= !isMuted;
+  document.getElementById('volumeControl').textContent= isMuted ? '🔇':'🔊';
 };
-document.body.insertBefore(volumeBtn, document.body.firstChild);
 </script>
-
 </body>
 </html>
