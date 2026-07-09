@@ -129,13 +129,12 @@
         cursor: pointer;
         white-space: nowrap;
         font-weight: 500;
-        position: relative;
-        overflow: hidden;
-        min-height: 50px; /* consistent height */
         display: flex;
         align-items: center;
         justify-content: center;
+        min-height: 50px;
         font-weight: 600;
+        text-align: center;
     }
 
     /* Style for unassigned buttons: more sleek */
@@ -400,8 +399,8 @@ const themes = {
         '--panel-bg': '#00f',
         '--panel-shadow': 'rgba(0,0,0,0.08)',
         '--hover-shadow': 'rgba(0,0,0,0.18)',
-    },
-    // ... add more to reach 22 total if needed
+    }
+    // ... add more themes here to reach 22 total
 };
 
 function applyTheme(themeName) {
@@ -416,6 +415,7 @@ const savedTheme = localStorage.getItem('theme') || 'light';
 applyTheme(savedTheme);
 document.getElementById('themeSelect').value = savedTheme;
 
+// Save theme on change
 document.getElementById('themeSelect').onchange = () => {
     const selectedTheme = document.getElementById('themeSelect').value;
     localStorage.setItem('theme', selectedTheme);
@@ -423,23 +423,10 @@ document.getElementById('themeSelect').onchange = () => {
 };
 
 /* -------------------------
-   Create Buttons and Logic
+   Rest of your existing code for button creation, audio, etc.
+   Make sure to save button assignment state as needed.
 --------------------------*/
-// (Your existing code for creating buttons, loading audio, etc.)
-// For brevity, I won't repeat it here, but ensure that unassigned buttons have class 'unassigned' and style them accordingly.
-
-// Example for styling unassigned buttons:
-function styleUnassignedButtons() {
-    for (let btn of document.querySelectorAll('#buttons button')) {
-        if (!btn.dataset.assigned) {
-            btn.classList.add('unassigned');
-        } else {
-            btn.classList.remove('unassigned');
-        }
-    }
-}
-
-// Call styleUnassignedButtons() after creating buttons and updating their assignment status.
+// (Your existing code continues here...)
 
 </script>
 </body>
